@@ -1,10 +1,12 @@
 @* menu Template File *@
-@(menuItems: List[de.luma.breakout.communication.ObservableGame.MENU_ITEM])
+@(menuItems: List[controllers.StaticGameInstance.MenuItemParameter])
 
-@*
-<div class="btn-group-vertical">
-@for(menuItem <- menuItems) {
-	<a href="/">@menuItem.name()</a>
+@main("Breakout") {
+	
+	<div class="MenuContainer">
+		@for(menuItem <- menuItems) {			
+			<a class="MenuItem" href="/selectmenu?item=@menuItem.index">@menuItem.text</a>
+		}
+	</div>
+
 }
-</div>
-*@

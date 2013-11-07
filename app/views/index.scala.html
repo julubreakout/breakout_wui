@@ -1,9 +1,27 @@
-@(message: String)
-
-@main("Breakout") {
+@main("Breakoutä") {
 
 	<div class="PlayGrid">
 		
 	</div>
+
+
+<script type="text/javascript">
+
+	$('body').keyup(function(event) {
+		if (event.which == 27) {
+			$.get('/gameInput?key=escape');
+		} else if (event.which == 37) {
+			$.get('/gameInput?key=left');
+		} else if (event.which == 39) {
+			$.get('/gameInput?key=right');
+		}
+	});
+
+	function refresh() {
+		document.location.reload();
+	}
+
+	setTimeout(function() {refresh(); }, 250);
+</script>
 
 }

@@ -1,5 +1,36 @@
+body {
+	background-color: black;
+	color: white;
+	padding: 0;
+	margin: 0;
+}
+
 .PlayGrid {
+	margin: auto;
 	width: 800px;
 	height: 800px;
-	background-color: blue;
+	border: 2px solid white;
+}
+
+.MenuContainer {
+	width: 100%;
+}
+
+.MenuItem {
+	margin: auto;
+	display: block;
+	width: 440px;
+	height: 134px;
+	background-image: url('/assets/images/button.png');
+	text-align: center;
+	font-size: 16pt;
+	padding-top: 53px;
+	color: white;
+	text-decoration: none;
+}
+
+.MenuItem:hover {
+	background-image: url('/assets/images/button_selected.png');
+	color: white;
+	text-decoration: none;
 }

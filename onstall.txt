@@ -6,3 +6,6 @@ activator.bat unter
 	
 play plugin in eclipse:
 	http://download.scala-ide.org/sdk/e38/scala210/stable/site
+	
+debugger starten
+	"play debug run" in C:\Users\lueckert\workspace\breakout_wui starten

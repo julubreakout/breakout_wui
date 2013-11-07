@@ -1,10 +1,10 @@
 package controllers;
 
-import java.util.Arrays;
-
-import de.luma.breakout.communication.ObservableGame.GAME_STATE;
 import play.mvc.Controller;
 import play.mvc.Result;
+import de.luma.breakout.communication.ObservableGame.GAME_STATE;
+import de.luma.breakout.communication.ObservableGame.MENU_ITEM;
+import de.luma.breakout.controller.IGameController.PLAYER_INPUT;
 
 public class Application extends Controller  {
     
@@ -19,19 +19,38 @@ public class Application extends Controller  {
 	}
 		
     public static Result index() {
-        return ok(views.html.index.render("Hello Play Framework"));
-    }
-    
-
-    public static Result grid() {
     	if (getGame().gameController.getState() == GAME_STATE.RUNNING) {   // render playgrid
-    		return ok("to do");
+    		return ok(views.html.index.render());
     	} else {  // render menu
-    		List<MENU_ITEM> items = new 
-    		return ok("kokoo"); //views.html.menu.render(Arrays.asList(getGame().menuItems)));
+    		return ok(views.html.menu.render(getGame().getMenuItems()));
     	}
     }
     
-
+    public static Result selectmenu(String index) {
+    	int itemIndex = Integer.valueOf(index);
+    	getGame().gameController.processMenuInput(MENU_ITEM.values()[itemIndex]);
+    	return redirect("/");
+    }
     
+    public static Result grid() {
+    	return ok("kk");
+    }
+    
+    public static Result gameInput(String key) {
+    	switch (key) {
+		case "escape":
+			getGame().gameController.processGameInput(PLAYER_INPUT.PAUSE);
+			break;
+		case "right":
+			getGame().gameController.processGameInput(PLAYER_INPUT.RIGHT);
+			break;
+		case "left":
+			getGame().gameController.processGameInput(PLAYER_INPUT.LEFT);
+			break;
+		default:
+			break;
+		}
+    	return ok();
+    }
+  
 }
