@@ -1,0 +1,10 @@
+@* menu Template File *@
+@(menuItems: List[de.luma.breakout.communication.ObservableGame.MENU_ITEM])
+
+@*
+<div class="btn-group-vertical">
+@for(menuItem <- menuItems) {
+	<a href="/">@menuItem.name()</a>
+}
+</div>
+*@
