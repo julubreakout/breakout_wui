@@ -1,0 +1,11 @@
+@(bricks: List[controllers.StaticGameInstance.HtmlBrick], balls: List[controllers.StaticGameInstance.HtmlBrick])
+
+
+<div class="GameGridContainer" style="">
+	@for(brick <- bricks) {			
+		<div class="Brick" style="left: @(brick.x)px; top: @(brick.y)px; width: @(brick.width)px;height: @(brick.height)px; background-color: @brick.color">&nbsp;</div>
+	}
+	@for(ball <- balls) {
+		<div class="Ball" style="left: @(ball.x)px; top: @(ball.y)px; width: @(ball.width)px;height: @(ball.height)px; background-color: white; border-radius: @(ball.width / 2)px">&nbsp;</div>
+	}	
+</div>

@@ -2,7 +2,6 @@
 <classpath>
 	<classpathentry kind="src" output=".target" path="app"/>
 	<classpathentry kind="src" output=".target" path="test"/>
-	<classpathentry kind="lib" path="C:/Users/lueckert/workspace/breakout_wui/target/scala-2.10/classes_managed"/>
 	<classpathentry kind="lib" path="C:/Users/lueckert/Downloads/play-2.2.1/play-2.2.1/repository/cache/org.webjars/webjars-play_2.10/jars/webjars-play_2.10-2.2.0.jar"/>
 	<classpathentry kind="lib" path="C:/Users/lueckert/Downloads/play-2.2.1/play-2.2.1/repository/cache/org.webjars/requirejs/jars/requirejs-2.1.8.jar"/>
 	<classpathentry kind="lib" path="C:/Users/lueckert/Downloads/play-2.2.1/play-2.2.1/repository/cache/org.webjars/webjars-locator/jars/webjars-locator-0.5.jar"/>

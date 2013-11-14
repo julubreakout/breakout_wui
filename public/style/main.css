@@ -34,3 +34,15 @@ body {
 	color: white;
 	text-decoration: none;
 }
+
+.GameGridContainer { 
+	position: relative;
+	margin: auto;
+	width: 800px;
+	height: 800px;
+	border: 2px solid white;
+}
+
+.Brick, .Ball {
+	position: absolute;
+}

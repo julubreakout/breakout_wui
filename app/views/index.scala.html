@@ -1,27 +1,64 @@
 @main("Breakoutä") {
 
-	<div class="PlayGrid">
+	<div id="PlayGrid">
 		
 	</div>
 
 
-<script type="text/javascript">
+	<script type="text/javascript">
+	
+	$(document).ready(function() {
 
-	$('body').keyup(function(event) {
-		if (event.which == 27) {
-			$.get('/gameInput?key=escape');
-		} else if (event.which == 37) {
-			$.get('/gameInput?key=left');
-		} else if (event.which == 39) {
-			$.get('/gameInput?key=right');
+		isLeft = 0;
+		isRight = 0;
+
+		function refresh() {
+
+			// check if left/right is pressed
+			if (isLeft == 1) {
+				$.get('/gameInput?key=left');
+			}
+			if (isRight == 1) {
+				$.get('/gameInput?key=right');
+			}
+			
+			$.get('/playGrid', function (data) {
+				$('#PlayGrid').html(data);
+			}).fail(function () {
+				console.error('ajax error');
+			});
+			setTimeout(function() {refresh(); }, 25);
 		}
+
+		// key pressed
+		$('body').keydown(function(event) {
+			if (event.which == 37) {
+				isLeft = 1;
+			} else if (event.which == 39) {
+				isRight = 1;
+			}
+		});
+
+		// key released
+		$('body').keyup(function(event) {
+			if (event.which == 27) {
+				$.get('/gameInput?key=escape').done(refresh);
+			} else if (event.which == 37) {
+				isLeft = 0;
+			} else if (event.which == 39) {
+				isRight = 0;
+			}
+		});
+	
+		/* click handler for menu items */
+		$('#PlayGrid').on('mousedown', 'a.MenuItem', function (e) {
+			document.location.href = '/selectmenu?index=' + $(this).attr('data-menuindex');
+		});
+
+	
+		setTimeout(function() {refresh(); }, 1);
+	
 	});
-
-	function refresh() {
-		document.location.reload();
-	}
-
-	setTimeout(function() {refresh(); }, 250);
-</script>
+	</script>
 
 }
