@@ -48,7 +48,7 @@ public final class TextMapping {
 		case TXT_YOU_WIN:
 			return "Sie haben gewonnen!";
 		case TXT_MAIN_MENU:
-			return "Hauptmen�";
+			return "Hauptmenü";
 		case TXT_NEW_GAME:
 			return "Neues Spiel";
 		case TXT_CONTINUE:
@@ -56,7 +56,7 @@ public final class TextMapping {
 		case TXT_NEXT_LEVEL:
 			return "Next Level";
 		case TXT_LEVEL_CHOOSE:
-			return "Level w�hlen";
+			return "Level wählen";
 		case TXT_LEVEL_EDITOR:
 			return "Level Editor";
 		case TXT_END:
@@ -64,7 +64,7 @@ public final class TextMapping {
 		case TXT_GAME_PAUSED:
 			return "Spiel angehalten";
 		case TXT_BACK_TO_MAIN_MENU:
-			return "Zur�ck zum Hauptmen�";
+			return "Zurück zum Hauptmenü";
 		default:
 			return "?";			
 		}
