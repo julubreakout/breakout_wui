@@ -1,4 +1,4 @@
-@main("Breakoutä") {
+@main("Breakoutï¿½") {
 
 	<div id="PlayGrid">
 		
@@ -22,12 +22,27 @@
 				$.get('/gameInput?key=right');
 			}
 			
-			$.get('/playGrid', function (data) {
-				$('#PlayGrid').html(data);
+			$.get('/playGrid')
+			.done(function (data, textStatus, jqXHR) {
+				// json result
+				if (jqXHR.getResponseHeader('content-type') == 'Application.levellist') {
+					var levelList = jQuery.parseJSON(data);
+
+					var levelDOM = $( document.createElement('div') ).addClass('LevelSelect');
+					$.each(levelList, function(key, value) {
+						levelDOM.append('<a class="levelButton" data-level="' + value + '">' + (key + 1) + '</a>');
+					});
+
+					$('#PlayGrid').html(levelDOM);
+					
+				// html pane
+				} else {
+					$('#PlayGrid').html(data);
+				}
 			}).fail(function () {
 				console.error('ajax error');
 			});
-			setTimeout(function() {refresh(); }, 25);
+			setTimeout(function() {refresh(); }, 33);
 		}
 
 		// key pressed
@@ -53,6 +68,12 @@
 		/* click handler for menu items */
 		$('#PlayGrid').on('mousedown', 'a.MenuItem', function (e) {
 			document.location.href = '/selectmenu?index=' + $(this).attr('data-menuindex');
+		});
+
+		/* click handler for level buttons */
+		$('#PlayGrid').on('mousedown', 'a.levelButton', function (e) {
+			var url = '/loadLevel?file=' + $(this).attr('data-level');
+			$.get(url);
 		});
 
 	

@@ -38,11 +38,32 @@ body {
 .GameGridContainer { 
 	position: relative;
 	margin: auto;
-	width: 800px;
-	height: 800px;
 	border: 2px solid white;
+	overflow: hidden;
 }
 
 .Brick, .Ball {
 	position: absolute;
+}
+
+.LevelSelect {
+	margin: auto;
+	width: 800px;
+}
+
+.levelButton, .levelButton:hover {
+	display: block;
+	float: left;
+	width: 100px;
+	height: 100px;
+	background-image: url('/assets/images/levelbutton.png');
+	background-repeat: no-repeat;
+	color: white;
+	text-decoration: none;
+	font-family: Impact, sans-serif;
+	font-weight: 200;
+	font-size: 36pt;
+	text-align: center;
+	padding-top: 15px;
+	cursor: pointer;
 }
