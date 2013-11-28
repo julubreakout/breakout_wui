@@ -1,8 +1,9 @@
 @* menu Template File *@
-@(menuItems: List[controllers.StaticGameInstance.MenuItemParameter])
+@(menu: controllers.HtmlHelper.MenuParameter)
 
 <div class="MenuContainer">
-	@for(menuItem <- menuItems) {			
+	<h1>@menu.title</h1>
+	@for(menuItem <- menu.menuItems) {			
 		<a class="MenuItem" data-menuindex="@menuItem.index" href="#">@menuItem.text</a>
 	}
 </div>

@@ -5,6 +5,11 @@ body {
 	margin: 0;
 }
 
+h1 {
+	text-align: center;
+	font-family: Impact, sans-serif;
+}
+
 .PlayGrid {
 	margin: auto;
 	width: 800px;
@@ -30,9 +35,15 @@ body {
 }
 
 .MenuItem:hover {
+	color: white;
+	text-decoration: none;
+}
+
+.MenuItem:focus {
 	background-image: url('/assets/images/button_selected.png');
 	color: white;
 	text-decoration: none;
+	outline: none;
 }
 
 .GameGridContainer { 

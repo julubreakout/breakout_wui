@@ -2,27 +2,39 @@ package controllers;
 
 import java.io.File;
 
+import play.libs.F.Callback;
+import play.libs.F.Callback0;
 import play.mvc.Controller;
 import play.mvc.Result;
+import play.mvc.WebSocket;
 
 import com.google.gson.Gson;
 
 import de.luma.breakout.communication.ObservableGame.GAME_STATE;
 import de.luma.breakout.communication.ObservableGame.MENU_ITEM;
+import de.luma.breakout.controller.GameController;
+import de.luma.breakout.controller.IGameController;
 import de.luma.breakout.controller.IGameController.PLAYER_INPUT;
 
 public class Application extends Controller  {
     
-	private static StaticGameInstance gameInstance;
+	private static IGameController gameController;	
 	
-	public static StaticGameInstance getGame() {
-		if (gameInstance == null) {
-			gameInstance = new StaticGameInstance();
-		}		
-		return gameInstance;
+	static {
+		getGameController();
 	}
-		
 	
+	
+	private static IGameController getGameController() {
+		if (gameController == null) {
+			gameController = new GameController();			
+			gameController.initialize();		
+		}
+		return gameController;
+	}
+	
+	
+		
 	/**
 	 * Returns the main page layout
 	 */
@@ -34,30 +46,32 @@ public class Application extends Controller  {
      * Returns content for #PlayGrid div
      */
     public static Result playGrid() {
-    	if (getGame().gameController.getState() == GAME_STATE.RUNNING) {   // render playgrid
+   	
+    	if (getGameController().getState() == GAME_STATE.RUNNING) {   // render playgrid
     		return ok(views.html.gamegrid.render(
-    				getGame().gameController.getGridSize().width,
-    				getGame().gameController.getGridSize().height,
-    				getGame().getBricks(), getGame().getBalls()));
-    	} else if (getGame().gameController.getState() == GAME_STATE.MENU_LEVEL_SEL) {
+    				getGameController().getGridSize().width,
+    				getGameController().getGridSize().height,
+    				HtmlHelper.getBricks(gameController), HtmlHelper.getBalls(gameController)));
+    	} else if (getGameController().getState() == GAME_STATE.MENU_LEVEL_SEL) {
     		return getLevels();
     	} else {  // render menu
-    		return ok(views.html.menu.render(getGame().getMenuItems()));
+    		return ok(views.html.menu.render(HtmlHelper.getMenu(
+    				gameController.getGameMenu().getMenuItems(),
+    				gameController.getGameMenu().getTitle())));
     	}
     }
-    
-    
+   
     private static Result getLevels() {   	    	
     	Gson gson = new Gson();
-    	String json = gson.toJson(getGame().gameController.getLevelList());
+    	String json = gson.toJson(getGameController().getLevelList());
 
     	response().setContentType("Application.levellist");
  		return ok(json); 
     }
     
     public static Result loadLevel(String file) {
-    	getGame().gameController.loadLevel(new File(file));
-    	getGame().gameController.processMenuInput(MENU_ITEM.MNU_CONTINUE);
+    	getGameController().loadLevel(new File(file));
+    	getGameController().processMenuInput(MENU_ITEM.MNU_CONTINUE);
     	return ok();
     }
     
@@ -67,7 +81,7 @@ public class Application extends Controller  {
      */
     public static Result selectmenu(String index) {
     	int itemIndex = Integer.valueOf(index);
-    	getGame().gameController.processMenuInput(MENU_ITEM.values()[itemIndex]);
+    	getGameController().processMenuInput(MENU_ITEM.values()[itemIndex]);
     	
     	return index();
     }
@@ -78,15 +92,15 @@ public class Application extends Controller  {
     public static Result gameInput(String key) {
     	switch (key) {
 		case "escape":
-			getGame().gameController.processGameInput(PLAYER_INPUT.PAUSE);
+			getGameController().processGameInput(PLAYER_INPUT.PAUSE);
 			break;
 		case "right":
-			getGame().gameController.processGameInput(PLAYER_INPUT.RIGHT);
-			getGame().gameController.processGameInput(PLAYER_INPUT.RIGHT);
+			getGameController().processGameInput(PLAYER_INPUT.RIGHT);
+			getGameController().processGameInput(PLAYER_INPUT.RIGHT);
 			break;
 		case "left":
-			getGame().gameController.processGameInput(PLAYER_INPUT.LEFT);
-			getGame().gameController.processGameInput(PLAYER_INPUT.LEFT);
+			getGameController().processGameInput(PLAYER_INPUT.LEFT);
+			getGameController().processGameInput(PLAYER_INPUT.LEFT);
 			break;
 		default:
 			break;
@@ -94,4 +108,16 @@ public class Application extends Controller  {
     	return ok();
     }
   
+    
+    
+    // #################### WEBSOCKET ##########################
+    
+    public static Result socket_index() {
+    	return ok(views.html.socket_index.render());
+    }
+    
+    public static WebSocket<String> socket_connect() {
+    	return new GameWebSocket(getGameController());
+    }
+    
 }

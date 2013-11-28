@@ -18,6 +18,7 @@ import java.util.TimerTask;
 import de.luma.breakout.communication.ObservableGame;
 import de.luma.breakout.communication.TextMapping;
 import de.luma.breakout.data.PlayGrid;
+import de.luma.breakout.data.menu.GameMenu;
 import de.luma.breakout.data.objects.IBall;
 import de.luma.breakout.data.objects.IBrick;
 import de.luma.breakout.data.objects.IDecodable;
@@ -53,6 +54,7 @@ public class GameController extends ObservableGame implements IGameController {
 	private PlayGrid grid;	
 	private Timer timer;
 	private GameTimerTask task;
+	private GameMenu menu;
 	private GAME_STATE state;
 	private boolean isInCreativeMode;
 	private int levelIndex;	
@@ -90,7 +92,6 @@ public class GameController extends ObservableGame implements IGameController {
 	 */
 	@Override
 	public void updateGame() {
-		
 		// move game objects only when not in creative mode
 		if (!this.isInCreativeMode) {
 			
@@ -197,8 +198,8 @@ public class GameController extends ObservableGame implements IGameController {
 	 */
 	private void pause() {
 		cancelTimer();
-
-		setState(GAME_STATE.PAUSED);		
+		setState(GAME_STATE.PAUSED);
+	
 		notifyGameMenu(new MENU_ITEM[] {MENU_ITEM.MNU_NEW_GAME, MENU_ITEM.MNU_CONTINUE, MENU_ITEM.MNU_BACK_MAIN_MENU, MENU_ITEM.MNU_END},  
 				TextMapping.getTextForIndex(TextMapping.TXT_GAME_PAUSED));
 	}
@@ -334,6 +335,17 @@ public class GameController extends ObservableGame implements IGameController {
 		default:
 			break;
 		}		
+	}
+	
+	/**
+	 * this method stores actual menu Items and Title
+	 * 
+	 */
+	@Override
+	public void notifyGameMenu(MENU_ITEM[] menuItems, String title) {
+		this.menu = new GameMenu(menuItems, title);
+		
+		super.notifyGameMenu(menuItems, title);
 	}
 	
 	/**
@@ -506,7 +518,6 @@ public class GameController extends ObservableGame implements IGameController {
 		return grid;
 	}
 
-
 	/**
 	 * set the Size of the grid and
 	 * resize Slider position.
@@ -542,7 +553,15 @@ public class GameController extends ObservableGame implements IGameController {
 	public List<IBrick> getBrickClasses() {
 		return getGrid().getBrickClasses();
 	}
-
+	
+	/**
+	 * (non-Javadoc)
+	 * @see de.luma.breakout.controller.IGameController#getGameMenu()
+	 */
+	public GameMenu getGameMenu() {
+		return menu;
+	}
+	
 	/** (non-Javadoc)
 	 * @see de.luma.breakout.controller.IGameController#getBalls()
 	 */
@@ -584,7 +603,8 @@ public class GameController extends ObservableGame implements IGameController {
 	public void setSlider(IBrick slider) {
 		getGrid().setSlider(slider);
 	}
-
+	
+	
 	/** (non-Javadoc)
 	 * @see de.luma.breakout.controller.IGameController#clearGrid()
 	 */

@@ -1,0 +1,132 @@
+@main("Breakout") {
+
+	<div id="PlayGrid">
+		
+	</div>
+
+
+	<script type="text/javascript">
+
+	$(document).ready(function() {
+		state = '';
+		actTabIndex = 1;
+		menuItemIndex = 0;
+		
+		socket = new WebSocket('ws://localhost:9000/socket_connect');
+		socket.onmessage = function(messageEvent) {
+
+			
+			var message = messageEvent.data;
+			var type = message.substring(0, message.indexOf(":"));
+			var content = message.substring(type.length + 1);
+
+			if (type == 'STATE') {
+				console.log('state is ' + content);
+			} else {
+				console.log('recieved ' + type);
+			}
+
+			// draw menu
+			if (type == "MENU") {
+				var menu = jQuery.parseJSON(content);			
+				
+				var menuDOM = $( document.createElement('div') ).addClass('MenuContainer');
+				menuDOM.append('<h1> ' + menu.title + ' </h1>');
+				var tabIndex = 1;
+				$.each(menu.menuItems, function(key, value) {
+					menuDOM.append('<a class="MenuItem" tabindex="' + tabIndex + '" data-menuindex="' + value.index + '" href="#">' + value.text + '</a>');
+					tabIndex++;
+				});
+
+				$('#PlayGrid').html(menuDOM);
+				menuItemIndex = menu.menuItems.length;
+				actTabIndex = 1;
+				$('.MenuItem[tabindex=' + actTabIndex + ']').focus();
+			// draw level selection
+			} else if (type == "LEVEL") {
+				var levelList = jQuery.parseJSON(content);
+
+				var levelDOM = $( document.createElement('div') ).addClass('LevelSelect');
+				$.each(levelList, function(key, value) {					
+					levelDOM.append('<a class="levelButton" data-level="' + value + '">' + (key + 1) + '</a>');
+				});
+
+				$('#PlayGrid').html(levelDOM);
+
+			// change state
+			} else if (type == "STATE") {
+				state = content;
+				
+			// html pane
+			} else if (state == 'RUNNING') { 
+				$('#PlayGrid').html(content);
+			}
+		};
+
+		isLeft = 0;
+		isRight = 0;
+
+		// key pressed
+		$('body').keydown(function(event) {
+			event.preventDefault();
+			if (event.which == 37) {// key left
+				isLeft = 1;			
+			} else if (event.which == 39) {// key right
+				isRight = 1;					
+			} else if (event.which == 27) {// escape
+				socket.send('key:PAUSE');
+			} else if (event.which == 38) {// key up
+				actTabIndex--;
+				if (actTabIndex == 0) {
+					actTabIndex = menuItemIndex;
+				}		
+				$('.MenuItem[tabindex=' + actTabIndex + ']').focus();
+			} else if (event.which == 40) {// key down
+				actTabIndex = (actTabIndex % menuItemIndex) + 1;
+				$('.MenuItem[tabindex=' + actTabIndex + ']').focus();
+			} else if (event.which = 13) {  // enter
+				$('.MenuItem[tabindex=' + actTabIndex + ']').trigger('mousedown');
+			}
+		});
+
+		// key released
+		$('body').keyup(function(event) {
+			 if (event.which == 37) {
+				isLeft = 0;
+			} else if (event.which == 39) {
+				isRight = 0;
+			}
+		});
+
+		// send key inputs to server
+		function sendKeyInput() {
+			if (isLeft == 1) {
+				socket.send('key:LEFT');
+			} else if (isRight == 1) {
+				socket.send('key:RIGHT');
+			}
+			setTimeout(sendKeyInput, 10);
+		}
+		sendKeyInput();
+		
+	
+		/* click handler for menu items */
+		$('#PlayGrid').on('mousedown', 'a.MenuItem', function (e) {
+			socket.send('menu:' + $(this).attr('data-menuindex'));
+		});
+
+		/* click handler for menu items */
+		$('#PlayGrid').on('mouseover', 'a.MenuItem', function (e) {
+			actTabIndex  =$(this).attr('tabindex');
+			$('.MenuItem[tabindex=' + actTabIndex + ']').focus();
+		});
+
+		/* click handler for level buttons */
+		$('#PlayGrid').on('mousedown', 'a.levelButton', function (e) {
+			socket.send('level:' + $(this).attr('data-level'));
+		});
+
+	});
+	</script>
+
+}

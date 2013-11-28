@@ -7,6 +7,7 @@ import java.util.List;
 import de.luma.breakout.communication.IObservableGame;
 import de.luma.breakout.communication.ObservableGame.GAME_STATE;
 import de.luma.breakout.communication.ObservableGame.MENU_ITEM;
+import de.luma.breakout.data.menu.GameMenu;
 import de.luma.breakout.data.objects.IBall;
 import de.luma.breakout.data.objects.IBrick;
 
@@ -99,6 +100,12 @@ public interface IGameController extends IObservableGame {
 	 * @return
 	 */
 	List<IBrick> getBrickClasses();
+	
+	/**
+	 * Return the GameMenu.
+	 * @return title and Items
+	 */
+	GameMenu getGameMenu();
 	
 	/**
 	 * Get a list of all balls.
