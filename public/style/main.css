@@ -5,9 +5,17 @@ body {
 	margin: 0;
 }
 
-h1 {
+h1, .TechInfo {
+	font-size: 18pt;
 	text-align: center;
 	font-family: Impact, sans-serif;
+}
+
+.TechInfo {
+	position: fixed;
+	text-align: right;
+	right: 20px;
+	top: 20px;
 }
 
 .PlayGrid {

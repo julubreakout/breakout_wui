@@ -15,6 +15,7 @@ import de.luma.breakout.communication.ObservableGame.MENU_ITEM;
 import de.luma.breakout.controller.GameController;
 import de.luma.breakout.controller.IGameController;
 import de.luma.breakout.controller.IGameController.PLAYER_INPUT;
+import de.luma.breakout.view.gui.MainWindow;
 
 public class Application extends Controller  {
     
@@ -24,16 +25,19 @@ public class Application extends Controller  {
 		getGameController();
 	}
 	
-	
 	private static IGameController getGameController() {
 		if (gameController == null) {
 			gameController = new GameController();			
-			gameController.initialize();		
+		
+			
+			MainWindow mainWindow = new MainWindow(gameController);                
+			gameController.addObserver(mainWindow.getBpaGameView2D());
+            mainWindow.setVisible(true);
+            
+        	gameController.initialize();	
 		}
 		return gameController;
 	}
-	
-	
 		
 	/**
 	 * Returns the main page layout
