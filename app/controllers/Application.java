@@ -2,8 +2,8 @@ package controllers;
 
 import java.io.File;
 
-import play.libs.F.Callback;
-import play.libs.F.Callback0;
+import play.data.DynamicForm;
+import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.WebSocket;
@@ -15,6 +15,7 @@ import de.luma.breakout.communication.ObservableGame.MENU_ITEM;
 import de.luma.breakout.controller.GameController;
 import de.luma.breakout.controller.IGameController;
 import de.luma.breakout.controller.IGameController.PLAYER_INPUT;
+import de.luma.breakout.data.user.User;
 import de.luma.breakout.view.gui.MainWindow;
 
 public class Application extends Controller  {
@@ -38,15 +39,49 @@ public class Application extends Controller  {
 		}
 		return gameController;
 	}
+	
+    public static String getActiveUser() {
+        if(session("UserName") != null && !session("UserName").equals("")) {
+          return session("UserName");
+        }
+        return "";
+    }
+	
+	public static Result login() {
+		if (!getActiveUser().equals("")) {
+			return redirect(routes.Application.socket_index());
+		}
+		
+		return ok(views.html.login.render(""));
+	}
+	
+	public static Result logout() {
+		session().clear();
+		return redirect(routes.Application.login());
+	}
+	
+	public static Result processLogin() {
+		Form<User> filledForm = DynamicForm.form(User.class).bindFromRequest();		
+		User user = filledForm.get();
+		
+		if (user.getUsername().equals("luma") && user.getPassword().equals("lülü")) {
+			session().clear();
+            session("UserName", user.getUsername());            
+			return redirect(routes.Application.socket_index());
+		}
+		
+		return ok(views.html.login.render("invalid login"));
+	}
 		
 	/**
 	 * Returns the main page layout
 	 */
-    public static Result index() {
+	@play.mvc.Security.Authenticated(Secured.class)
+    public static Result index() {		
     	return ok(views.html.index.render());
     }
     
-    /**
+    /** 
      * Returns content for #PlayGrid div
      */
     public static Result playGrid() {
@@ -116,6 +151,7 @@ public class Application extends Controller  {
     
     // #################### WEBSOCKET ##########################
     
+    @play.mvc.Security.Authenticated(Secured.class)
     public static Result socket_index() {
     	return ok(views.html.socket_index.render());
     }
@@ -123,5 +159,6 @@ public class Application extends Controller  {
     public static WebSocket<String> socket_connect() {
     	return new GameWebSocket(getGameController());
     }
+    
     
 }

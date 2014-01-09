@@ -1,0 +1,12 @@
+@(error: String)
+
+@main("Breakout") {
+<form method="post">
+	<div style="width: 600px; margin: auto; background: gray">
+	<div style="color: red">@error</div>
+		<input type="text" name="username" /><br /> <input type="password"
+			name="password" /><br />
+		<button type="submit">Login</button>
+	</div>
+</form>
+}
