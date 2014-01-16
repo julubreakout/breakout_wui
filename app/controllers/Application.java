@@ -115,7 +115,7 @@ public class Application extends Controller  {
 	 */
 	public static Result openid_auth() {
 		String providerUrl = "https://www.google.com/accounts/o8/id";
-		String returnToUrl = routes.Application.openid_verify();
+		String returnToUrl = routes.Application.openid_verify().absoluteURL(request());
 		Map<String, String> attributes = new HashMap<>();
 		attributes.put("Email", "http://schema.openid.net/contact/email");
 		attributes.put("FirstName", "http://schema.openid.net/namePerson/first");
