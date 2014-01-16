@@ -4,6 +4,9 @@ import play.mvc.Http.Context;
 import play.mvc.Result;
 import play.mvc.Security;
 
+/**
+ * Methods marked with this attribute will require a user login.
+ */
 public class Secured extends Security.Authenticator {
 	
         @Override

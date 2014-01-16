@@ -1,12 +1,46 @@
 @(error: String)
 
 @main("Breakout") {
-<form method="post">
-	<div style="width: 600px; margin: auto; background: gray">
-	<div style="color: red">@error</div>
-		<input type="text" name="username" /><br /> <input type="password"
-			name="password" /><br />
-		<button type="submit">Login</button>
-	</div>
-</form>
+	<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/md5.js" type="text/javascript"></script>
+	<br >
+	<h1>Login</h1>
+	<form id="loginForm" method="post">
+		<div style="width: 600px; margin: auto">
+		<div style="color: red">@error</div>
+		<table style="widht: 100%">
+			<tr>
+				<td>Username:</td>
+				<td><input type="text" name="username" /></td>
+			</tr>
+			<tr>
+				<td>Passwort:</td>
+				<td><input type="password" name="password" id="txtPW" /></td>
+			</tr>
+		</table>
+		<br>
+		<button type="submit">Login</button><button type="button" id="btnOpenID">Login with OpenID</button>
+		</div>
+	</form>
+	<script type="text/javascript">
+		$('#loginForm').submit(function() {
+			$('#txtPW').val(CryptoJS.MD5($('#txtPW').val()));
+		});
+
+		$('#btnOpenID').click(function () {
+			document.location.href = "openid_auth";
+		});
+	</script>
+	
+	<style type="text/css">
+	form {
+		text-align: center;
+	}
+	input {
+		border-sizing: border-box;
+		border: 1px solid white;;
+		background: black;
+		color: white;
+		width: 400px;
+	}
+	</style>
 }

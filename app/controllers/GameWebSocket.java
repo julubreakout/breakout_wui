@@ -15,6 +15,10 @@ import de.luma.breakout.communication.ObservableGame.MENU_ITEM;
 import de.luma.breakout.controller.IGameController;
 import de.luma.breakout.controller.IGameController.PLAYER_INPUT;
 
+/**
+ * Manages a WebSocket connection to a client.
+ * Receives events from webbrowser and send game content to the client.
+ */
 public class GameWebSocket extends WebSocket<String> implements IGameObserver{
 	
 	private Gson gson;
@@ -30,8 +34,15 @@ public class GameWebSocket extends WebSocket<String> implements IGameObserver{
 	}
 	
 	@Override
-	public void updateRepaintPlayGrid() {	}
-
+	public void updateRepaintPlayGrid() {	}  // not required
+ 
+	@Override
+	public void updateOnResize() { }  // not required
+	
+	
+	/**
+	 * Notifies client of changed game state (JSON-formatted)
+	 */
 	@Override
 	public void updateGameState(GAME_STATE state) {
 		out.write("STATE:" + state);
@@ -42,6 +53,9 @@ public class GameWebSocket extends WebSocket<String> implements IGameObserver{
 		}
 	}
 
+	/**
+	 * Sends menu items to client (JSON-formatted)
+	 */
 	@Override
 	public void updateGameMenu(MENU_ITEM[] menuItems, String title) {	
 		System.out.println("updateGameMenu");
@@ -49,6 +63,9 @@ public class GameWebSocket extends WebSocket<String> implements IGameObserver{
 		out.write("MENU:" + gson.toJson(HtmlHelper.getMenu(menuItems, title)));
 	}
 
+	/**
+	 * Sends the rendered play grid to the client.  (HTML)
+	 */
 	@Override
 	public void updateGameFrame() {
 		if (gameController.getState() != GAME_STATE.RUNNING) {
@@ -64,14 +81,14 @@ public class GameWebSocket extends WebSocket<String> implements IGameObserver{
 		out.write("GRID:" + playGrid.body());	
 	}
 
-	@Override
-	public void updateOnResize() {
-		// TODO Auto-generated method stub
-		
-	}
 
+	/**
+	 * Handles incoming events from webbrowser
+	 */
 	@Override
 	public void onReady(play.mvc.WebSocket.In<String> in, play.mvc.WebSocket.Out<String> out) {
+		
+		// handler for incoming messages
 		in.onMessage(new Callback<String>() {
 			@Override
 			public void invoke(String event) throws Throwable {
@@ -96,6 +113,7 @@ public class GameWebSocket extends WebSocket<String> implements IGameObserver{
 			}			
 		});
 		
+		// handler when browser/tab is closed
 		in.onClose(new Callback0() {
 			@Override
 			public void invoke() throws Throwable {
@@ -103,15 +121,18 @@ public class GameWebSocket extends WebSocket<String> implements IGameObserver{
 			}
 		});
 		
-		
 		this.out = out;
 		this.in = in;
 		
+		// add this client to the observers of the running game
 		GameWebSocket.this.gameController.addObserver(GameWebSocket.this);
 		
+		// Send the current state of the game to the client
+		// so that the client can show a menu that appeared before the connection was established.
 		initFirstFrame();
 	}
 
+	
 	private void initFirstFrame() {
 		if (this.gameController.getState() != GAME_STATE.RUNNING) {
 			updateGameState(GAME_STATE.MENU_MAIN);
