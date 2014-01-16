@@ -9,3 +9,7 @@ play plugin in eclipse:
 	
 debugger starten
 	"play debug run" in C:\Users\lueckert\workspace\breakout_wui starten
+	
+heroku login:
+user: lukas.eckert@htwg-konstanz.de
+pw: sup...
