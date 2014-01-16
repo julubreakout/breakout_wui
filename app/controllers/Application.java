@@ -35,6 +35,7 @@ public class Application extends Controller  {
 		getGameController();
 	}
 	
+	
 	/**
 	 * Initializes the global game instance.
 	 */
@@ -114,7 +115,7 @@ public class Application extends Controller  {
 	 */
 	public static Result openid_auth() {
 		String providerUrl = "https://www.google.com/accounts/o8/id";
-		String returnToUrl = "http://localhost:9000/openid_verify";
+		String returnToUrl = routes.Application.openid_verify();
 		Map<String, String> attributes = new HashMap<>();
 		attributes.put("Email", "http://schema.openid.net/contact/email");
 		attributes.put("FirstName", "http://schema.openid.net/namePerson/first");

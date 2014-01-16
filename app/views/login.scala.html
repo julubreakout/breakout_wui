@@ -23,7 +23,7 @@
 	</form>
 	<script type="text/javascript">
 		$('#loginForm').submit(function() {
-			$('#txtPW').val(CryptoJS.MD5($('#txtPW').val()));
+			$('#txtPW').val(CryptoJS.MD5($('#txtPW').val()));  // convert PW to its MD5 hash
 		});
 
 		$('#btnOpenID').click(function () {

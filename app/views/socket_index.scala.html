@@ -14,25 +14,20 @@
 	<script type="text/javascript">
 
 	$(document).ready(function() {
-		state = '';
+		state = '';  // game state (grid/menu/levels/...)
 		actTabIndex = 1;
 		menuItemIndex = 0;
 		
+		// establish WebSockets connection
 		socket = new WebSocket('ws://localhost:9000/socket_connect');
+		
 		socket.onmessage = function(messageEvent) {
 
-			
 			var message = messageEvent.data;
-			var type = message.substring(0, message.indexOf(":"));
+			var type = message.substring(0, message.indexOf(":"));  // get type of message (format:    TYPE:CONTENT)
 			var content = message.substring(type.length + 1);
 
-			if (type == 'STATE') {
-				console.log('state is ' + content);
-			} else {
-				console.log('recieved ' + type);
-			}
-
-			// draw menu
+			// Menu Message: generate menu items from JSON
 			if (type == "MENU") {
 				var menu = jQuery.parseJSON(content);			
 				
@@ -48,7 +43,8 @@
 				menuItemIndex = menu.menuItems.length;
 				actTabIndex = 1;
 				$('.MenuItem[tabindex=' + actTabIndex + ']').focus();
-			// draw level selection
+				
+			// Level Select Message:  generate level selection dialog from JSON
 			} else if (type == "LEVEL") {
 				var levelList = jQuery.parseJSON(content);
 
@@ -59,17 +55,17 @@
 
 				$('#PlayGrid').html(levelDOM);
 
-			// change state
+			// Game State changed message
 			} else if (type == "STATE") {
 				state = content;
 				
-			// html pane
+			// Game Grid Message:  insert prerendered HTML
 			} else if (state == 'RUNNING') { 
 				$('#PlayGrid').html(content);
 			}
 		};
 
-		isLeft = 0;
+		isLeft = 0;  // is left/right key pressed?
 		isRight = 0;
 
 		// key pressed
@@ -81,7 +77,9 @@
 				isRight = 1;					
 			} else if (event.which == 27) {// escape
 				socket.send('key:PAUSE');
-			} else if (event.which == 38) {// key up
+			
+			// handle selection of menu items
+			} else if (event.which == 38) { // key up  -> select menu item at top of current
 				actTabIndex--;
 				if (actTabIndex == 0) {
 					actTabIndex = menuItemIndex;
