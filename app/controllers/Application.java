@@ -229,21 +229,19 @@ public class Application extends Controller  {
      * Processes a key event on the play grid
      */
     public static Result gameInput(String key) {
-    	switch (key) {
-		case "escape":
+    	if (key == null) {
+    		return ok();
+    	}
+    	
+    	if (key.equals("escape")) {
 			getGameController().processGameInput(PLAYER_INPUT.PAUSE);
-			break;
-		case "right":
+    	} else if (key.equals("right")) {
 			getGameController().processGameInput(PLAYER_INPUT.RIGHT);
 			getGameController().processGameInput(PLAYER_INPUT.RIGHT);
-			break;
-		case "left":
+		} else if (key.equals("left")) {
 			getGameController().processGameInput(PLAYER_INPUT.LEFT);
 			getGameController().processGameInput(PLAYER_INPUT.LEFT);
-			break;
-		default:
-			break;
-		}
+		}		
     	return ok();
     }
   
