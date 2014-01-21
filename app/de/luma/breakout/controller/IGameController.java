@@ -4,9 +4,9 @@ import java.awt.Dimension;
 import java.io.File;
 import java.util.List;
 
+import de.luma.breakout.communication.GAME_STATE;
 import de.luma.breakout.communication.IObservableGame;
-import de.luma.breakout.communication.ObservableGame.GAME_STATE;
-import de.luma.breakout.communication.ObservableGame.MENU_ITEM;
+import de.luma.breakout.communication.MENU_ITEM;
 import de.luma.breakout.data.menu.GameMenu;
 import de.luma.breakout.data.objects.IBall;
 import de.luma.breakout.data.objects.IBrick;

@@ -1,7 +1,5 @@
 package de.luma.breakout.communication;
 
-import de.luma.breakout.communication.ObservableGame.GAME_STATE;
-import de.luma.breakout.communication.ObservableGame.MENU_ITEM;
 
 /**
  * Interface for Game Observer.

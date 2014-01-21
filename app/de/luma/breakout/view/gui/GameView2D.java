@@ -16,9 +16,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.event.MouseInputAdapter;
 
+import de.luma.breakout.communication.GAME_STATE;
 import de.luma.breakout.communication.IGameObserver;
-import de.luma.breakout.communication.ObservableGame.GAME_STATE;
-import de.luma.breakout.communication.ObservableGame.MENU_ITEM;
+import de.luma.breakout.communication.MENU_ITEM;
 import de.luma.breakout.communication.TextMapping;
 import de.luma.breakout.controller.IGameController;
 import de.luma.breakout.data.objects.IBall;

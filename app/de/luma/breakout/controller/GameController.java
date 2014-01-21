@@ -15,6 +15,8 @@ import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import de.luma.breakout.communication.GAME_STATE;
+import de.luma.breakout.communication.MENU_ITEM;
 import de.luma.breakout.communication.ObservableGame;
 import de.luma.breakout.communication.TextMapping;
 import de.luma.breakout.data.PlayGrid;

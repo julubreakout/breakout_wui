@@ -9,9 +9,9 @@ import play.mvc.WebSocket;
 
 import com.google.gson.Gson;
 
+import de.luma.breakout.communication.GAME_STATE;
 import de.luma.breakout.communication.IGameObserver;
-import de.luma.breakout.communication.ObservableGame.GAME_STATE;
-import de.luma.breakout.communication.ObservableGame.MENU_ITEM;
+import de.luma.breakout.communication.MENU_ITEM;
 import de.luma.breakout.controller.IGameController;
 import de.luma.breakout.controller.IGameController.PLAYER_INPUT;
 

@@ -11,7 +11,7 @@ import java.io.File;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import de.luma.breakout.communication.ObservableGame.MENU_ITEM;
+import de.luma.breakout.communication.MENU_ITEM;
 
 /**
  * Panel to hold a button for each loadable level.

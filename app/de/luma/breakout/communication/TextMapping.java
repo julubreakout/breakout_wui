@@ -1,6 +1,5 @@
 package de.luma.breakout.communication;
 
-import de.luma.breakout.communication.ObservableGame.MENU_ITEM;
 
 /**
  * Class to map text to id and menuitem.

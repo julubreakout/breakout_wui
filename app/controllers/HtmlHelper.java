@@ -3,8 +3,8 @@ package controllers;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.luma.breakout.communication.MENU_ITEM;
 import de.luma.breakout.communication.TextMapping;
-import de.luma.breakout.communication.ObservableGame.MENU_ITEM;
 import de.luma.breakout.controller.IGameController;
 import de.luma.breakout.data.objects.IBall;
 import de.luma.breakout.data.objects.IBrick;
