@@ -17,21 +17,48 @@
 <body>
 	<div id="fb-root"></div>
 	<div class="fb-like" style="margin:5px 0 0 5px" data-href="https://github.com/lumabreakout/breakout_wui" data-layout="button_count" data-action="like" data-show-faces="false" data-share="false"></div>
-	
+	<br />
+	<button class="btn btn-default navbar-btn" type="button" id="googleBtn">Comment Game</button>
 	<br />
 	<center><img src="@routes.Assets.at("images/breakout_logo.png")" /></center><br />
 
 	@content
 
-	<script>(
-		function(d, s, id) {
-		  var js, fjs = d.getElementsByTagName(s)[0];
-		  if (d.getElementById(id)) return;
-		  js = d.createElement(s); js.id = id;
-		  js.src = "//connect.facebook.net/de_DE/all.js#xfbml=1";
-		  fjs.parentNode.insertBefore(js, fjs);
+	<div id="dialog" title="Comment this game" style="display: none">
+  		<div class="g-comments" 
+  			data-href="https://github.com/lumabreakout/breakout_wui"
+		    data-width="642"
+		    data-first_party_property="BLOGGER"
+		    data-view_type="FILTERED_POSTMOD">
+		</div>
+	</div>
+	
+	<script>
+		(function(d, s, id) {
+			var js, fjs = d.getElementsByTagName(s)[0];
+			if (d.getElementById(id))
+				return;
+			js = d.createElement(s);
+			js.id = id;
+			js.src = "//connect.facebook.net/de_DE/all.js#xfbml=1";
+			fjs.parentNode.insertBefore(js, fjs);
 		}(document, 'script', 'facebook-jssdk'));
 	</script>
+	
+	<script src="https://apis.google.com/js/plusone.js"></script>
+	
+	<script>
+		$(document).ready(function() {
+			$('#googleBtn').click(function() {
+				$("#dialog").dialog({
+					height : 600,
+					width : 700,
+					modal : true
+				});
+			});
+		});
+	</script>
+	
 </body>
 </html>
 
