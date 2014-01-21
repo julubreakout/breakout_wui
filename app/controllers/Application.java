@@ -196,14 +196,14 @@ public class Application extends Controller  {
      */
     private static Result getLevels() {   
     	// select java Path as offset for the levels
-    	String offset = Play.current().path().getAbsolutePath();
-    	return ok(offset);
-    	
-//    	Gson gson = new Gson();
-//    	String json = gson.toJson(getGameController().getLevelList(offset));
-//
-//    	response().setContentType("Application.levellist");
-// 		return ok(json); 
+    	String offset = ""; //Play.current().path().getAbsolutePath();
+//    	return ok(offset);
+//    	
+    	Gson gson = new Gson();
+    	String json = gson.toJson(getGameController().getLevelList(offset));
+
+    	response().setContentType("Application.levellist");
+ 		return ok(json); 
     }
     
     /**
@@ -223,13 +223,13 @@ public class Application extends Controller  {
      */
     public static Result selectmenu(String index) {
     	int itemIndex = Integer.valueOf(index);
-    	
-    	MENU_ITEM item = MENU_ITEM.values()[itemIndex];
-    	return ok( item + " index: " + itemIndex);
-    	
-//    	getGameController().processMenuInput();
 //    	
-//    	return index();
+    	MENU_ITEM item = MENU_ITEM.values()[itemIndex];
+//    	return ok( item + " index: " + itemIndex);
+//    	
+    	getGameController().processMenuInput(item);
+    	
+    	return index();
     }
     
     /**
@@ -253,5 +253,7 @@ public class Application extends Controller  {
     	return ok();
     }
   
-    
+    public static Result test() {
+    	return ok(Play.current().path().getAbsolutePath());
+    }
 }
