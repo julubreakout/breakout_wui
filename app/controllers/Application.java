@@ -46,7 +46,7 @@ public class Application extends Controller  {
 			// Open Swing GUI of game
 //			MainWindow mainWindow = new MainWindow(gameController);                
 //			gameController.addObserver(mainWindow.getBpaGameView2D());
-//          mainWindow.setVisible(true);
+//			mainWindow.setVisible(true);
             
         	gameController.initialize();	
 		}

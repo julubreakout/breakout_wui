@@ -19,7 +19,8 @@
 		menuItemIndex = 0;
 		
 		// establish WebSockets connection
-		socket = new WebSocket('ws://localhost:9000/socket_connect');
+		var socketUrl = 'ws://' + window.location.host + '/socket_connect';
+		socket = new WebSocket(socketUrl);
 		
 		socket.onmessage = function(messageEvent) {
 

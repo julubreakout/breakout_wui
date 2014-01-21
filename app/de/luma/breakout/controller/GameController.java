@@ -277,7 +277,11 @@ public class GameController extends ObservableGame implements IGameController {
 	 */
 	private void showMainMenu() {
 		setState(GAME_STATE.MENU_MAIN);
-		notifyGameMenu(new MENU_ITEM[]{MENU_ITEM.MNU_NEW_GAME, MENU_ITEM.MNU_LEVEL_CHOOSE, MENU_ITEM.MNU_LEVEL_EDITOR, MENU_ITEM.MNU_END},
+		// with editor
+//		notifyGameMenu(new MENU_ITEM[]{MENU_ITEM.MNU_NEW_GAME, MENU_ITEM.MNU_LEVEL_CHOOSE, MENU_ITEM.MNU_LEVEL_EDITOR, MENU_ITEM.MNU_END},
+//				TextMapping.getTextForIndex(TextMapping.TXT_MAIN_MENU));
+		
+		notifyGameMenu(new MENU_ITEM[]{MENU_ITEM.MNU_NEW_GAME, MENU_ITEM.MNU_LEVEL_CHOOSE, MENU_ITEM.MNU_END},
 				TextMapping.getTextForIndex(TextMapping.TXT_MAIN_MENU));
 	}
 	
