@@ -296,6 +296,9 @@ public class GameController extends ObservableGame implements IGameController {
 	 */
 	@Override
 	public void processMenuInput(MENU_ITEM indexOfMenuItem) {
+		if (indexOfMenuItem == null) {
+			indexOfMenuItem = MENU_ITEM.MNU_BACK_MAIN_MENU;
+		}
 		switch (indexOfMenuItem) {
 		case MNU_NEW_GAME:
 			this.setCreativeMode(false);	
