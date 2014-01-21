@@ -223,9 +223,13 @@ public class Application extends Controller  {
      */
     public static Result selectmenu(String index) {
     	int itemIndex = Integer.valueOf(index);
-    	getGameController().processMenuInput(MENU_ITEM.values()[itemIndex]);
     	
-    	return index();
+    	MENU_ITEM item = MENU_ITEM.values()[itemIndex];
+    	return ok( item + " index: " + itemIndex);
+    	
+//    	getGameController().processMenuInput();
+//    	
+//    	return index();
     }
     
     /**
