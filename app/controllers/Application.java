@@ -196,7 +196,7 @@ public class Application extends Controller  {
      */
     private static Result getLevels() {   
     	// select java Path as offset for the levels
-    	String offset = Play.javaPath();
+    	String offset = Play.current().path().getAbsolutePath();
     	
     	Gson gson = new Gson();
     	String json = gson.toJson(getGameController().getLevelList(offset));
