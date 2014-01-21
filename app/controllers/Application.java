@@ -222,12 +222,10 @@ public class Application extends Controller  {
      * Processes a click on a menu button from AJAX-based view
      */
     public static Result selectmenu(String index) {
-    	return ok(index);
+    	int itemIndex = Integer.valueOf(index);
+    	getGameController().processMenuInput(MENU_ITEM.values()[itemIndex]);
     	
-//    	int itemIndex = Integer.valueOf(index);
-//    	getGameController().processMenuInput(MENU_ITEM.values()[itemIndex]);
-//    	
-//    	return index();
+    	return index();
     }
     
     /**
