@@ -506,7 +506,17 @@ public class GameController extends ObservableGame implements IGameController {
 	 */
 	@Override
 	public List<String> getLevelList() {
-		File f = new File(LEVEL_PATH);
+		return getLevelList("");
+	}
+	
+	/**
+	 * Get a list of file path of available levels.
+	 *  add a offset if your not working localy
+	 * @param offset
+	 * @return
+	 */
+	public List<String> getLevelList(String offset) {
+		File f = new File(offset + LEVEL_PATH);
 		List<String> retVal = new ArrayList<String>();
 		
 		for (String s : f.list()) {

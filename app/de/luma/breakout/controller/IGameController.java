@@ -91,6 +91,14 @@ public interface IGameController extends IObservableGame {
 	 */
 	List<String> getLevelList();
 	
+	/**
+	 * Get a list of file path of available levels.
+	 *  add a offset if your not working localy
+	 * @param offset
+	 * @return
+	 */
+	List<String> getLevelList(String offset);
+	
 
 	/* #######################################  GRID ACCESS HANDLING #######################################   */
 	/* ############################   the same procedure as every year...    ###########################  */

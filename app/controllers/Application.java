@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import play.api.Play;
 import play.data.DynamicForm;
 import play.data.Form;
 import play.libs.F;
@@ -193,9 +194,12 @@ public class Application extends Controller  {
     /**
      * Returns JSON-formatted level list.
      */
-    private static Result getLevels() {   	    	
+    private static Result getLevels() {   
+    	// select java Path as offset for the levels
+    	String offset = Play.javaPath();
+    	
     	Gson gson = new Gson();
-    	String json = gson.toJson(getGameController().getLevelList());
+    	String json = gson.toJson(getGameController().getLevelList(offset));
 
     	response().setContentType("Application.levellist");
  		return ok(json); 

@@ -20,7 +20,6 @@
 		
 		// establish WebSockets connection
 		var socketUrl = 'ws://' + window.location.host + '/socket_connect';
-		alert(socketUrl);
 		socket = new WebSocket(socketUrl);
 		
 		socket.onmessage = function(messageEvent) {
