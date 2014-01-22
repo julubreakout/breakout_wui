@@ -42,7 +42,11 @@ public class Application extends Controller  {
 	 */
 	private static IGameController getGameController() {
 		if (gameController == null) {
-			gameController = new GameController();			
+			if (Play.current().path().getAbsolutePath().startsWith("/app")) {
+				gameController = new GameController("/app");			
+			} else {
+				gameController = new GameController("");
+			}
 			
 			// Open Swing GUI of game
 //			MainWindow mainWindow = new MainWindow(gameController);                
@@ -195,13 +199,10 @@ public class Application extends Controller  {
     /**
      * Returns JSON-formatted level list.
      */
-    private static Result getLevels() {   
-    	// select java Path as offset for the levels
-    	String offset = "/app/"; //Play.current().path().getAbsolutePath();
-    	
+    private static Result getLevels() {       	
     	Gson gson = new Gson();
     	System.out.println("call get LevelList");
-    	List<String> levels = getGameController().getLevelList(offset);
+    	List<String> levels = getGameController().getLevelList();
     	System.out.println("levels count: " + levels.size());
     	
     	

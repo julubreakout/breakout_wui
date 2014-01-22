@@ -52,7 +52,7 @@ public class GameController extends ObservableGame implements IGameController {
 			updateGame();			
 		}		
 	}	
-
+	private String appPath; // base directory of application 
 	private PlayGrid grid;	
 	private Timer timer;
 	private GameTimerTask task;
@@ -70,8 +70,9 @@ public class GameController extends ObservableGame implements IGameController {
 	/**
 	 * Default Constructor
 	 */
-	public GameController() {
+	public GameController(String appPath) {
 		super();		
+		this.appPath = appPath;
 	}
 
 
@@ -500,14 +501,6 @@ public class GameController extends ObservableGame implements IGameController {
 		return true;
 	}
 	
-	/**
-	 * Get a list of file paths of available levels.
-	 * @return
-	 */
-	@Override
-	public List<String> getLevelList() {
-		return getLevelList("");
-	}
 	
 	/**
 	 * Get a list of file path of available levels.
@@ -515,8 +508,8 @@ public class GameController extends ObservableGame implements IGameController {
 	 * @param offset
 	 * @return
 	 */
-	public List<String> getLevelList(String offset) {
-		File f = new File(offset + LEVEL_PATH);
+	public List<String> getLevelList() {
+		File f = new File(appPath + LEVEL_PATH);
 		System.out.println("load levels from: " + f.getAbsolutePath());
 		List<String> retVal = new ArrayList<String>();
 		
