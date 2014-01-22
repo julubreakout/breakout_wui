@@ -118,6 +118,7 @@
 		/* click handler for menu items */
 		$('#PlayGrid').on('mousedown', 'a.MenuItem', function (e) {
 			socket.send('menu:' + $(this).attr('data-menuindex'));
+			return false;
 		});
 
 		/* click handler for menu items */
@@ -129,6 +130,7 @@
 		/* click handler for level buttons */
 		$('#PlayGrid').on('mousedown', 'a.levelButton', function (e) {
 			socket.send('level:' + $(this).attr('data-level'));
+			return false;
 		});
 
 	});

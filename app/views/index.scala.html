@@ -73,13 +73,17 @@
 	
 		/* click handler for menu items */
 		$('#PlayGrid').on('mousedown', 'a.MenuItem', function (e) {
+			e.preventDefault();
 			document.location.href = '/selectmenu?index=' + $(this).attr('data-menuindex');
+			return false;
 		});
 
 		/* click handler for level buttons */
 		$('#PlayGrid').on('mousedown', 'a.levelButton', function (e) {
+			e.preventDefault();
 			var url = '/loadLevel?file=' + $(this).attr('data-level');
 			$.get(url);
+			return false;
 		});
 
 	
