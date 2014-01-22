@@ -43,7 +43,7 @@ public class Application extends Controller  {
 	private static IGameController getGameController() {
 		if (gameController == null) {
 			if (Play.current().path().getAbsolutePath().startsWith("/app")) {
-				gameController = new GameController("/app");			
+				gameController = new GameController("/app/");			
 			} else {
 				gameController = new GameController("");
 			}
