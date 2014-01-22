@@ -20,6 +20,16 @@
 	<br />
 	<button class="btn btn-default navbar-btn" type="button" id="googleBtn">Comment Game</button>
 	<br />
+	<div class="btn-group">
+	<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+    Connection Mode <span class="caret"></span>
+  	</button>
+	<ul class="dropdown-menu" role="menu">
+    <li><a href="@routes.Application.index()">AJAX-Polling</a></li>
+    <li><a href="@routes.Application.socket_index()">WebSockets</a></li>
+  </ul>
+  </div>
+	
 	<center><img src="@routes.Assets.at("images/breakout_logo.png")" /></center><br />
 
 	@content
@@ -53,7 +63,14 @@
 				$("#dialog").dialog({
 					height : 600,
 					width : 700,
-					modal : true
+					modal : true,
+					show : {
+						effect : "blind",
+						duration : 500
+					},
+					hide: {
+				        effect: "explode",
+				        duration: 500				      }
 				});
 			});
 		});
