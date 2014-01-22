@@ -517,6 +517,7 @@ public class GameController extends ObservableGame implements IGameController {
 	 */
 	public List<String> getLevelList(String offset) {
 		File f = new File(offset + LEVEL_PATH);
+		System.out.println("load levels from: " + f.getAbsolutePath());
 		List<String> retVal = new ArrayList<String>();
 		
 		for (String s : f.list()) {

@@ -2,6 +2,7 @@ package controllers;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import play.api.Play;
@@ -197,11 +198,14 @@ public class Application extends Controller  {
     private static Result getLevels() {   
     	// select java Path as offset for the levels
     	String offset = "/app/"; //Play.current().path().getAbsolutePath();
-//    	return ok(offset);
-//    	
+    	
     	Gson gson = new Gson();
-    	String json = gson.toJson(getGameController().getLevelList(offset));
-
+    	System.out.println("call get LevelList");
+    	List<String> levels = getGameController().getLevelList(offset);
+    	System.out.println("levels count: " + levels.size());
+    	
+    	
+    	String json = gson.toJson(levels);
     	response().setContentType("Application.levellist");
  		return ok(json); 
     }
