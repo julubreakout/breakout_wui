@@ -61,7 +61,7 @@ public class GameController extends ObservableGame implements IGameController {
 	private boolean isInCreativeMode;
 	private int levelIndex;	
 	
-	private static final String LEVEL_PATH = "levels\\";
+	private static final String LEVEL_PATH = "levels/";
 	private static final int FRAME_DELAY = 10;
 	private static final int DEFAULT_GRID_WIDTH = 500;
 	private static final int DEFAULT_GRID_HEIGHT = 500;
@@ -514,8 +514,9 @@ public class GameController extends ObservableGame implements IGameController {
 		List<String> retVal = new ArrayList<String>();
 		
 		for (String s : f.list()) {
+			System.out.println("found level:" + s);
 			if (s.endsWith(".lvl")) {
-				retVal.add(f.getPath() + "\\" + s);
+				retVal.add(f.getPath() + "/" + s);
 			}
 		}
 		return retVal;
