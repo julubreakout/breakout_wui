@@ -30,7 +30,7 @@ public class Application extends Controller  {
     
 	private static IGameController gameController;	  // static game instance
 	private static final String USER_NAME = "luma.webtech";
-	private static final String USER_PW = "900150983cd24fb0d6963f7d28e17f72";
+	private static final String USER_PW = "584da0a485f209242059e6de66aac904";
 	
 	static {
 		getGameController();
@@ -169,7 +169,7 @@ public class Application extends Controller  {
 	 * Returns AJAX-based main page layout of the game
 	 */
 	@play.mvc.Security.Authenticated(Secured.class)
-    public static Result index() {		
+    public static Result index() {
     	return ok(views.html.index.render());
     }
     
