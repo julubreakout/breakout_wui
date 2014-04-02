@@ -1,4 +1,4 @@
-package controllers;
+package de.luma.breakout.view.web.controllers;
 
 import java.io.File;
 
@@ -73,7 +73,7 @@ public class GameWebSocket extends WebSocket<String> implements IGameObserver{
 		}
 		
 		System.out.println("updateGameFrame");
-		Html playGrid = views.html.gamegrid.render(
+		Html playGrid = de.luma.breakout.view.web.views.html.gamegrid.render(
 				gameController.getGridSize().width,
 				gameController.getGridSize().height,
 				HtmlHelper.getBricks(gameController), HtmlHelper.getBalls(gameController));

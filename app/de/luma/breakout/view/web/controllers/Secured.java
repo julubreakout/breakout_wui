@@ -1,4 +1,4 @@
-package controllers; 
+package de.luma.breakout.view.web.controllers; 
 
 import play.mvc.Http.Context;
 import play.mvc.Result;
