@@ -1,0 +1,14 @@
+1) play framework 2.2.1 downloaden und entpacken
+2) play-verzeichnis in PATH-variable aufnehmen
+3) play plugin in eclipse installieren:
+	http://download.scala-ide.org/sdk/e38/scala210/stable/site
+	Scale IDE + play2 plugin auswählen
+-- eclipse beenden --
+4) konsole in projektverzeichnis öffnen und "play eclipse" ausführen
+5) projekt in eclipse öffnen
+6) startplay.bat ausführen zum debuggen
+
+
+logindaten für herolu.com:
+user: lukas.eckert@htwg-konstanz.de
+pw: sup....99
