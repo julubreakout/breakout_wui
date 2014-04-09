@@ -1,0 +1,73 @@
+import sbt._
+import Keys._
+import play.Project._
+//import de.johoop.jacoco4sbt._
+
+object ApplicationBuild extends Build {
+
+	val appName         = "julubreakout_wui"
+			val appVersion      = "1.0-SNAPSHOT"
+
+			// general project dependencies
+			val appDependencies = Seq(
+					javaCore,
+					javaJdbc,
+					javaEbean,
+					"com.google.inject" % "guice" % "3.0",
+					"com.google.inject.extensions" % "guice-multibindings" % "3.0",
+					"org.ektorp" % "org.ektorp" % "1.3.0",
+					"com.typesafe" %% "play-plugins-mailer" % "2.1-RC2",
+					"julubreakout" % "core" % "0.0.1-SNAPSHOT",
+					"org.webjars" %% "webjars-play" % "2.2.0", 
+					"org.webjars" % "bootstrap" % "2.3.1"
+					//"de.htwg.seapal" % "core" % "1.0-SNAPSHOT"
+					)
+
+					val main = play.Project(appName, appVersion, appDependencies).settings(
+
+								routesImport ++= Seq(
+									"_root_.utils.Binders._",
+									"java.util.UUID"
+									),
+
+								templatesImport ++= Seq(
+										"play.mvc.Http.Context.Implicit._",
+										"de.luma.breakout.view.web.views.html._"
+										),
+
+								//javascriptEntryPoints <<= baseDirectory(base =>
+								//	base / "public" / "js" ** "*.js"
+								//),
+
+								// known as group id...
+								organization := "de.julubreakout.wui",
+
+								// disable using the Scala version in output paths and artifacts
+								crossPaths := false,
+
+								// add additional resovers
+								resolvers += "HTWG Resolver" at "http://lenny2.in.htwg-konstanz.de:8081/artifactory/libs-snapshot-local",
+
+								// add publishing target
+								publishTo := Some("HTWG Publisher" at "http://lenny2.in.htwg-konstanz.de:8081/artifactory/libs-snapshot-local;build.timestamp=" + new java.util.Date().getTime()),
+
+								// setup entry points for sonar code analyzer
+								pomExtra :=
+								<build>
+											<sourceDirectory>app</sourceDirectory>
+											<testSourceDirectory>test</testSourceDirectory>
+											<resources>
+											<resource>
+											<directory>app</directory>
+											</resource>
+											</resources>
+											</build>
+								<distributionManagement>
+											<snapshotRepository>
+											<id>lenny2</id>
+											<name>lenny2-snapshots</name>
+											<url>http://lenny2.in.htwg-konstanz.de:8081/artifactory/libs-snapshot-local</url>
+											</snapshotRepository>
+											</distributionManagement>
+						)
+}

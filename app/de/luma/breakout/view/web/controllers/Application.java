@@ -30,7 +30,7 @@ public class Application extends Controller  {
     
 	private static IGameController gameController;	  // static game instance
 	private static final String USER_NAME = "luma.webtech";
-	private static final String USER_PW = "584da0a485f209242059e6de66aac904";
+	private static final String USER_PW = "900150983cd24fb0d6963f7d28e17f72";  // = abc
 	
 	static {
 		getGameController();
