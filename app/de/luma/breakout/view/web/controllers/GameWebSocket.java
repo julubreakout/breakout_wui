@@ -19,7 +19,7 @@ import de.luma.breakout.controller.IGameController.PLAYER_INPUT;
  * Manages a WebSocket connection to a client.
  * Receives events from webbrowser and send game content to the client.
  */
-public class GameWebSocket extends WebSocket<String> implements IGameObserver{
+public class GameWebSocket extends WebSocket<String> implements IGameObserver {
 	
 	private Gson gson;
 	private play.mvc.WebSocket.In<String> in;
