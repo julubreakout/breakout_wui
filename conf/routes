@@ -3,13 +3,17 @@
 # ~~~~
 
 GET     /                        de.luma.breakout.view.web.controllers.Application.index()
-GET		/login                   de.luma.breakout.view.web.controllers.UserController.login()      
-POST    /login                   de.luma.breakout.view.web.controllers.UserController.processLogin()
-GET		/logout					 de.luma.breakout.view.web.controllers.UserController.logout()
+GET		/login                   @de.luma.breakout.view.web.controllers.UserController.login()   
+POST    /login                   @de.luma.breakout.view.web.controllers.UserController.processLogin()
+GET		/logout					 @de.luma.breakout.view.web.controllers.UserController.logout()   
+
+GET		/register					 @de.luma.breakout.view.web.controllers.UserController.register()   
+POST    /register                   @de.luma.breakout.view.web.controllers.UserController.processRegister()
+
 #GET     /selectmenu              de.luma.breakout.view.web.controllers.Application.selectmenu(index)
 #GET     /gameInput               de.luma.breakout.view.web.controllers.Application.gameInput(key)
 #GET     /playGrid                de.luma.breakout.view.web.controllers.Application.playGrid()
-#GET		/loadLevel				 de.luma.breakout.view.web.controllers.Application.loadLevel(file)
+#GET	/loadLevel				 de.luma.breakout.view.web.controllers.Application.loadLevel(file)
 GET		/test					de.luma.breakout.view.web.controllers.Application.test()
 
 # websocket routes
@@ -17,7 +21,7 @@ GET		/socket_connect			de.luma.breakout.view.web.controllers.Application.socket_
 GET		/socket_index			de.luma.breakout.view.web.controllers.Application.socket_index()
 
 #openId routes
-GET		/openid_auth			de.luma.breakout.view.web.controllers.UserController.openid_auth()
+GET		/openid_auth			@de.luma.breakout.view.web.controllers.UserController.openid_auth()
 GET		/openid_verify			@de.luma.breakout.view.web.controllers.UserController.openid_verify()
 
 # Map static resources from the /public folder to the /assets URL path

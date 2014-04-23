@@ -1,10 +1,10 @@
 package de.luma.breakout.view.web.models;
 
 public class User implements IUser {
-
+	
 	private String name;
 	private String email;
-	private String passwordHash;
+	private String password;
 	
 	
 	public String getName() {
@@ -19,11 +19,11 @@ public class User implements IUser {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	public String getPasswordHash() {
-		return passwordHash;
+	public String getPassword() {
+		return password;
 	}
-	public void setPasswordHash(String passwordHash) {
-		this.passwordHash = passwordHash;
+	public void setPassword(String password) {
+		this.password = password;
 	}
 	
 	

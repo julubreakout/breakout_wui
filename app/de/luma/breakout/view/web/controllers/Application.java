@@ -15,9 +15,8 @@ import de.luma.breakout.communication.MENU_ITEM;
 import de.luma.breakout.controller.GameController;
 import de.luma.breakout.controller.IGameController;
 import de.luma.breakout.controller.IGameController.PLAYER_INPUT;
-import de.luma.breakout.view.web.AppGlobal;
+import de.luma.breakout.view.web.datalayer.UserDAO;
 import de.luma.breakout.view.web.models.User;
-import de.luma.breakout.view.web.models.UserDAO;
 
 /**
  * Main controller of Play application 
@@ -173,10 +172,10 @@ public class Application extends Controller  {
   
     public static Result test() {
     	User u = new User();
-    	u.setName("Wolfgang");
-    	u.setEmail("a@b.com");
-    	AppGlobal.getInjector().getInstance(UserDAO.class).create(u);
-    	
+//    	u.setName("Wolfgang");
+//    	u.setEmail("a@b.com");
+//    	AppGlobal.getInjector().getInstance(UserDAO.class).create(u);
+//    	
     	return ok(Play.current().path().getAbsolutePath());
     }
 }

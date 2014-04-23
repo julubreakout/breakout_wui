@@ -3,7 +3,6 @@ package de.luma.breakout.view.web.controllers;
 import java.util.HashMap;
 import java.util.Map;
 
-import de.luma.breakout.view.web.models.User;
 import play.data.DynamicForm;
 import play.data.Form;
 import play.libs.F;
@@ -11,75 +10,105 @@ import play.libs.OpenID;
 import play.mvc.Controller;
 import play.mvc.Result;
 
+import com.google.inject.Inject;
+
+import de.luma.breakout.view.web.datalayer.UserDAO;
+import de.luma.breakout.view.web.models.User;
+
 public class UserController extends Controller {
 
-	private static final String USER_NAME = "luma.webtech";
-	private static final String USER_PW = "900150983cd24fb0d6963f7d28e17f72";  // = abc
-	
-	
+	//	private static final String USER_NAME = "luma.webtech";
+	//	private static final String USER_PW = "900150983cd24fb0d6963f7d28e17f72";  // = abc
+
+	@Inject
+	private UserDAO userDAO;
+
+
 	// ##########################  FORMS AUTHENTICATION HANDLERS ###########################
-		
+
 	/**
 	 * Returns name/email of logged in user or empty string.
 	 */
-    public static String getActiveUser() {
-        if(session("UserName") != null && !session("UserName").equals("")) {
-          return session("UserName");
-        }
-        return "";
-    }
-	
-    /**
-     * GET: /login 
-     * Shows login page
-     */
-	public static Result login() {
+	public static String getActiveUser() {
+		if(session("UserName") != null && !session("UserName").equals("")) {
+			return session("UserName");
+		}
+		return "";
+	}
+
+	/**
+	 * GET: /login 
+	 * Shows login page
+	 */
+	public Result login() {
 		// redirect to index if already logged in
 		if (!getActiveUser().equals("")) {
 			return redirect(routes.Application.socket_index());
 		}
-		
-		return ok(de.luma.breakout.view.web.views.html.login.render(""));
+
+		return ok(de.luma.breakout.view.web.views.html.login.render(new User(), ""));
 	}
-	
+
 	/**
 	 * GET:  /logout
 	 * Terminate a user session.
 	 */
-	public static Result logout() {
+	public Result logout() {
 		session().clear();
 		return redirect(routes.UserController.login());
 	}
-	
+
 	/**
 	 * POST: /processLogin
 	 * Processes a forms login.
 	 */
-	public static Result processLogin() {
+	public Result processLogin() {
 		// get form data from request
 		Form<User> filledForm = DynamicForm.form(User.class).bindFromRequest();		
-		User user = filledForm.get();
+		User userModel = filledForm.get();
 
-		if (user.getName().equals(USER_NAME) && user.getPasswordHash().equals(USER_PW)) {  // login is correct
-			session().clear();
-            session("UserName", user.getName());            
-			return redirect(routes.Application.socket_index());
+		// get user from DB
+		User user = userDAO.getByEmail(userModel.getEmail());
+		if (user == null) {
+			return ok(de.luma.breakout.view.web.views.html.login.render(userModel, "User does not exist. Please register first."));
 		}
-		
-		return ok(de.luma.breakout.view.web.views.html.login.render("Username or password are wrong."));
+
+		// check password
+		if (userModel.getPassword() == null || !userModel.getPassword().equals(user.getPassword())) {
+			return ok(de.luma.breakout.view.web.views.html.login.render(userModel, "Wrong password!"));
+		}
+ 
+		// allow login
+		session().clear();
+		session("UserName", user.getName()); 
+		session("Email", user.getEmail());
+		return redirect(routes.Application.socket_index());
 	}
-	
+
+	public Result register() {
+		return ok(de.luma.breakout.view.web.views.html.register.render(new User(), "")); 
+	}
 
 
-	
-	
+	// ########################## REGISTRATION HANDLERS ###########################
+	public Result processRegister() {
+		Form<User> filledForm = DynamicForm.form(User.class).bindFromRequest();		
+		User user = filledForm.get();
+		System.out.println("creating new player");
+		userDAO.create(user);
+
+		return redirect(routes.UserController.login());
+	}
+
+
+
 	// ####################  HANDLERS FOR OPEN ID AUTHENTICATION ##################
 
 	/**
 	 * GET: /auth
 	 * Show login page for OpenID authentication
 	 */
-	public static Result openid_auth() {
+	public Result openid_auth() {
 		String providerUrl = "https://www.google.com/accounts/o8/id";
 		String returnToUrl = routes.UserController.openid_verify().absoluteURL(request());
 		Map<String, String> attributes = new HashMap<String, String>();
@@ -89,7 +118,7 @@ public class UserController extends Controller {
 		F.Promise<String> redirectUrl = OpenID.redirectURL(providerUrl, returnToUrl, attributes);
 		return redirect(redirectUrl.get());
 	}
-	
+
 	/**
 	 * GET: /verify
 	 * Callback action for OpenID provider
@@ -101,5 +130,5 @@ public class UserController extends Controller {
 		session("UserName", userInfo.attributes.get("Email"));
 		return redirect(routes.Application.socket_index());
 	}
-	
+
 }
