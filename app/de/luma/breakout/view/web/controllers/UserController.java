@@ -3,7 +3,7 @@ package de.luma.breakout.view.web.controllers;
 import java.util.HashMap;
 import java.util.Map;
 
-import de.luma.breakout.data.user.User;
+import de.luma.breakout.view.web.models.User;
 import play.data.DynamicForm;
 import play.data.Form;
 import play.libs.F;
@@ -60,9 +60,9 @@ public class UserController extends Controller {
 		Form<User> filledForm = DynamicForm.form(User.class).bindFromRequest();		
 		User user = filledForm.get();
 
-		if (user.getUsername().equals(USER_NAME) && user.getPassword().equals(USER_PW)) {  // login is correct
+		if (user.getName().equals(USER_NAME) && user.getPasswordHash().equals(USER_PW)) {  // login is correct
 			session().clear();
-            session("UserName", user.getUsername());            
+            session("UserName", user.getName());            
 			return redirect(routes.Application.socket_index());
 		}
 		
