@@ -86,3 +86,12 @@ h1, .TechInfo {
 	padding-top: 15px;
 	cursor: pointer;
 }
+
+input[type=text], input[type=password], input[type=email] {
+	box-sizing: border-box;
+	width: 400px;
+}
+
+.bg-info  {
+	color: green;
+}

@@ -5,9 +5,11 @@
 	<br >
 	<h1>Create Player</h1>
 	<br /><br />
-	<form id="registerForm" method="post">
-	<div style="width: 600px; margin: auto">
-	<table style="width: 100%">
+	<form id="registerForm" method="post" autocomplete="off">
+		
+		<div style="width: 600px; margin: auto">
+		<div class="bg-info">@error</div>
+		<table style="width: 100%">
 			<tr>
 				<td>Name:</td>
 				<td><input type="text" name="Name" value="@Model.getName()" /></td>

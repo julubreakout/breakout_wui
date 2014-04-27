@@ -14,6 +14,7 @@ import de.luma.breakout.communication.IGameObserver;
 import de.luma.breakout.communication.MENU_ITEM;
 import de.luma.breakout.controller.IGameController;
 import de.luma.breakout.controller.IGameController.PLAYER_INPUT;
+import de.luma.breakout.view.web.models.User;
 
 /**
  * Manages a WebSocket connection to a client.
@@ -24,13 +25,15 @@ public class GameWebSocket extends WebSocket<String> implements IGameObserver {
 	private Gson gson;
 	private play.mvc.WebSocket.In<String> in;
 	private play.mvc.WebSocket.Out<String> out;
+	private User user;
 		
 	private IGameController gameController;
 	
-	public GameWebSocket(IGameController gameController) {
+	public GameWebSocket(IGameController gameController, User user) {
 		super();
 		this.gson = new Gson();
 		this.gameController = gameController;
+		this.user = user;
 	}
 	
 	@Override
@@ -71,8 +74,7 @@ public class GameWebSocket extends WebSocket<String> implements IGameObserver {
 		if (gameController.getState() != GAME_STATE.RUNNING) {
 			return;
 		}
-		
-		System.out.println("updateGameFrame");
+
 		Html playGrid = de.luma.breakout.view.web.views.html.gamegrid.render(
 				gameController.getGridSize().width,
 				gameController.getGridSize().height,

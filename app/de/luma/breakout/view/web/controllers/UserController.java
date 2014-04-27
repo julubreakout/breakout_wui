@@ -17,14 +17,21 @@ import de.luma.breakout.view.web.models.User;
 
 public class UserController extends Controller {
 
-	//	private static final String USER_NAME = "luma.webtech";
-	//	private static final String USER_PW = "900150983cd24fb0d6963f7d28e17f72";  // = abc
-
+	/**
+	 * Key for session() object which contains the name of the current user.
+	 */
+	public static final String SessionKey_UserName = "UserName";
+	
+	/**
+	 * Key for session() object which contains the email (= ID) of the current user.
+	 */
+	public static final String SessionKey_Email = "Email";
+	
 	@Inject
 	private UserDAO userDAO;
 
 
-	// ##########################  FORMS AUTHENTICATION HANDLERS ###########################
+	// ##########################  LOGIN HANDLERS ###########################
 
 	/**
 	 * Returns name/email of logged in user or empty string.
@@ -43,7 +50,7 @@ public class UserController extends Controller {
 	public Result login() {
 		// redirect to index if already logged in
 		if (!getActiveUser().equals("")) {
-			return redirect(routes.Application.socket_index());
+			return redirect(routes.Application.index());
 		}
 
 		return ok(de.luma.breakout.view.web.views.html.login.render(new User(), ""));
@@ -82,7 +89,7 @@ public class UserController extends Controller {
 		session().clear();
 		session("UserName", user.getName()); 
 		session("Email", user.getEmail());
-		return redirect(routes.Application.socket_index());
+		return redirect(routes.Application.index());
 	}
 
 	public Result register() {
@@ -90,7 +97,7 @@ public class UserController extends Controller {
 	}
 
 
-	// ########################## REGISTRATION HANDLERS ###########################
+	// ########################## REGISTRATION & PROFILE HANDLERS ###########################
 	public Result processRegister() {
 		Form<User> filledForm = DynamicForm.form(User.class).bindFromRequest();		
 		User user = filledForm.get();
@@ -99,8 +106,40 @@ public class UserController extends Controller {
 
 		return redirect(routes.UserController.login());
 	}
+	
+	@play.mvc.Security.Authenticated(Secured.class)
+	public Result account() {
+		User currentUser = userDAO.getByEmail(session(SessionKey_Email));
+		return ok(de.luma.breakout.view.web.views.html.account.render(currentUser, "")); 
+	}
 
-
+	@play.mvc.Security.Authenticated(Secured.class)
+	public Result updateAccount() {
+		User currentUser = userDAO.getByEmail(session(SessionKey_Email));
+		
+		Form<User> filledForm = DynamicForm.form(User.class).bindFromRequest();		
+		User userModel = filledForm.get();
+		
+		currentUser.setName(userModel.getName());
+		session(SessionKey_UserName, currentUser.getName());
+		if (userModel.getPassword() != null && !userModel.getPassword().equals("")) {
+			currentUser.setPassword(userModel.getPassword());
+		}
+		
+		userDAO.update(currentUser);
+		
+		return ok(de.luma.breakout.view.web.views.html.account.render(currentUser, "Updated user account.")); 
+	}
+	
+	@play.mvc.Security.Authenticated(Secured.class)
+	public Result deleteAccount() {
+		User currentUser = userDAO.getByEmail(session(SessionKey_Email));
+		userDAO.delete(currentUser);
+		
+		session().clear();
+		
+		return redirect(routes.UserController.login());
+	}
 
 	// ####################  HANDLERS FOR OPEN ID AUTHENTICATION ##################
 
@@ -128,7 +167,7 @@ public class UserController extends Controller {
 		OpenID.UserInfo userInfo = userInfoPromise.get();
 		session().clear();
 		session("UserName", userInfo.attributes.get("Email"));
-		return redirect(routes.Application.socket_index());
+		return redirect(routes.Application.index());
 	}
 
 }
