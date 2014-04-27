@@ -23,7 +23,13 @@ libraryDependencies ++= Seq(
 	"org.webjars" % "bootstrap" % "2.3.1",
 	"com.db4o" % "db4o-full-java5" % "7.13-SNAPSHOT",
 	"com.google.inject" % "guice" % "3.0",
-	"julubreakout" % "core" % "0.0.1-SNAPSHOT")
+	"julubreakout" % "core" % "0.0.1-SNAPSHOT",
+	"org.hibernate" % "hibernate" % "3.5.4-Final",
+	"org.hibernate" % "hibernate-annotations" % "3.5.6-Final",
+	"mysql" % "mysql-connector-java" % "5.1.26",
+	"org.slf4j" % "slf4j-api" % "1.5.8",
+	"org.slf4j" % "slf4j-simple" % "1.5.8",
+	"javassist" % "javassist" % "3.12.1.GA")
 
 playJavaSettings
 

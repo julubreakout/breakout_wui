@@ -186,7 +186,7 @@ public class Application extends Controller  {
 	//    }
 
 	public Result test() {
-		User u = new User();
+		//User u = new User();
 		//    	u.setName("Wolfgang");
 		//    	u.setEmail("a@b.com");
 		//    	AppGlobal.getInjector().getInstance(UserDAO.class).create(u);

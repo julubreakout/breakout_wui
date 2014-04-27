@@ -1,10 +1,8 @@
 package de.luma.breakout.view.web.modules;
 
-import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
 import com.google.inject.name.Names;
 
-import de.luma.breakout.view.web.controllers.UserController;
 import de.luma.breakout.view.web.datalayer.Db4oUserDAO;
 import de.luma.breakout.view.web.datalayer.UserDAO;
 
