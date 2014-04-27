@@ -15,6 +15,11 @@ import com.google.inject.Inject;
 import de.luma.breakout.view.web.datalayer.UserDAO;
 import de.luma.breakout.view.web.models.User;
 
+/**
+ * Manages all requests for user & account management.
+ * @author Lukas
+ *
+ */
 public class UserController extends Controller {
 
 	/**
@@ -92,12 +97,21 @@ public class UserController extends Controller {
 		return redirect(routes.Application.index());
 	}
 
+	
+	// ########################## REGISTRATION & PROFILE HANDLERS ###########################
+	
+	/**
+	 * GET:  /register
+	 * Show the user registration page.
+	 */
 	public Result register() {
 		return ok(de.luma.breakout.view.web.views.html.register.render(new User(), "")); 
 	}
-
-
-	// ########################## REGISTRATION & PROFILE HANDLERS ###########################
+	
+	/**
+	 * POST:  /register
+	 * Handles a new user registration.
+	 */
 	public Result processRegister() {
 		Form<User> filledForm = DynamicForm.form(User.class).bindFromRequest();		
 		User user = filledForm.get();
@@ -107,12 +121,20 @@ public class UserController extends Controller {
 		return redirect(routes.UserController.login());
 	}
 	
+	/**
+	 * GET:  /account
+	 * Shows the user profile.
+	 */
 	@play.mvc.Security.Authenticated(Secured.class)
 	public Result account() {
 		User currentUser = userDAO.getByEmail(session(SessionKey_Email));
 		return ok(de.luma.breakout.view.web.views.html.account.render(currentUser, "")); 
 	}
 
+	/**
+	 * POST:  /account
+	 * Handles updates to the user profile.
+	 */
 	@play.mvc.Security.Authenticated(Secured.class)
 	public Result updateAccount() {
 		User currentUser = userDAO.getByEmail(session(SessionKey_Email));
@@ -131,6 +153,10 @@ public class UserController extends Controller {
 		return ok(de.luma.breakout.view.web.views.html.account.render(currentUser, "Updated user account.")); 
 	}
 	
+	/**
+	 * GET:  /account/delete
+	 * Deletes a user account.
+	 */
 	@play.mvc.Security.Authenticated(Secured.class)
 	public Result deleteAccount() {
 		User currentUser = userDAO.getByEmail(session(SessionKey_Email));

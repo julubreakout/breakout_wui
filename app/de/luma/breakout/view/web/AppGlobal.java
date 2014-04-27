@@ -3,6 +3,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 
 import de.luma.breakout.view.web.datalayer.UserDAO;
+import de.luma.breakout.view.web.modules.CouchDbModule;
 import de.luma.breakout.view.web.modules.Db4oModule;
 import de.luma.breakout.view.web.modules.HibernateModule;
 import play.Application;
@@ -10,7 +11,7 @@ import play.GlobalSettings;
 
 public class AppGlobal extends GlobalSettings {
 
-	private final static Injector guice = Guice.createInjector(new  HibernateModule ());  // Db4oModule
+	private final static Injector guice = Guice.createInjector(new CouchDbModule());  // Db4oModule  HibernateModule
 
 	public static Injector getInjector() {
 		return guice;

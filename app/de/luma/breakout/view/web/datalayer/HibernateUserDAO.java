@@ -11,6 +11,11 @@ import com.google.inject.Inject;
 
 import de.luma.breakout.view.web.models.User;
 
+/**
+ * Provides acces to User objects stored in a Hibernate-supported database.
+ * @author Lukas
+ *
+ */
 public class HibernateUserDAO implements UserDAO {
 
 	@Inject

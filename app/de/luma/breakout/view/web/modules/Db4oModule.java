@@ -12,7 +12,7 @@ public class Db4oModule extends BreakoutBaseModule {
 	protected void configure() {
 		super.configure();
 		
-		bind(String.class).annotatedWith(Names.named("Db4oDbPath")).toInstance("db4o.db");
+		bind(String.class).annotatedWith(Names.named("Db4oDbPath")).toInstance("db4o.db");   // local database file
 		bind(UserDAO.class).to(Db4oUserDAO.class).in(Singleton.class);
 	}
 

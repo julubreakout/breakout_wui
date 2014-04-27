@@ -11,6 +11,11 @@ import com.google.inject.name.Named;
 
 import de.luma.breakout.view.web.models.User;
 
+/**
+ * Provides acces to User objects stored in a Db4o database.
+ * @author Lukas
+ *
+ */
 public class Db4oUserDAO implements UserDAO {
 
 	private ObjectContainer db;

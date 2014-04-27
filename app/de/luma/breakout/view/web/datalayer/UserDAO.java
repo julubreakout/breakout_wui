@@ -3,7 +3,7 @@ package de.luma.breakout.view.web.datalayer;
 import de.luma.breakout.view.web.models.User;
 
 /**
- * Provides access to User objects.
+ * Provides access to User objects in various persistent stores.
  * @author Lukas
  */
 public interface UserDAO {

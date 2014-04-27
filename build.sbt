@@ -29,7 +29,8 @@ libraryDependencies ++= Seq(
 	"mysql" % "mysql-connector-java" % "5.1.26",
 	"org.slf4j" % "slf4j-api" % "1.5.8",
 	"org.slf4j" % "slf4j-simple" % "1.5.8",
-	"javassist" % "javassist" % "3.12.1.GA")
+	"javassist" % "javassist" % "3.12.1.GA",
+	"org.ektorp" % "org.ektorp" % "1.3.0")
 
 playJavaSettings
 
