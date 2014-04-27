@@ -192,7 +192,25 @@ public class UserController extends Controller {
 		F.Promise<OpenID.UserInfo> userInfoPromise = OpenID.verifiedId();
 		OpenID.UserInfo userInfo = userInfoPromise.get();
 		session().clear();
-		session("UserName", userInfo.attributes.get("Email"));
+		
+		String email = userInfo.attributes.get("Email");
+		String name = userInfo.attributes.get("FirstName") + " " + userInfo.attributes.get("LastName");
+		
+		// check if an account exists for this email
+		User user = userDAO.getByEmail(email);
+		if (user == null) {
+			 // first login of this user -> create new account in background
+			User userModel = new User();
+			userModel.setEmail(email);
+			userModel.setName(name);
+			userDAO.create(userModel);
+		} else {
+			// user may have changed the own name
+			name = user.getName();
+		}
+		
+		session(SessionKey_UserName, name);
+		session(SessionKey_Email, email);
 		return redirect(routes.Application.index());
 	}
 
