@@ -1,7 +1,9 @@
+@(userName: String)
+
 @main("Breakout") {
 
 	<div class="TechInfo">
-		Welcome @de.luma.breakout.view.web.controllers.UserController.getActiveUser()!
+		Welcome @userName!
 		<br >
 		<a href="logout">Logout</a> | 
 		<a href="account">My Account</a>

@@ -38,15 +38,6 @@ public class UserController extends Controller {
 
 	// ##########################  LOGIN HANDLERS ###########################
 
-	/**
-	 * Returns name/email of logged in user or empty string.
-	 */
-	public static String getActiveUser() {
-		if(session("UserName") != null && !session("UserName").equals("")) {
-			return session("UserName");
-		}
-		return "";
-	}
 
 	/**
 	 * GET: /login 
@@ -212,6 +203,16 @@ public class UserController extends Controller {
 		session(SessionKey_UserName, name);
 		session(SessionKey_Email, email);
 		return redirect(routes.Application.index());
+	}
+	
+	/**
+	 * Returns name/email of logged in user or empty string.
+	 */
+	public static String getActiveUser() {
+		if(session("UserName") != null && !session("UserName").equals("")) {
+			return session("UserName");
+		}
+		return "";
 	}
 
 }

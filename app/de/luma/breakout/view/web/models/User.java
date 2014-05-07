@@ -9,20 +9,36 @@ import javax.persistence.Transient;
 import org.codehaus.jackson.annotate.JsonProperty;
 
 @Entity
-@Table(name="USER")
+@Table(name="breakout2_players")
 public class User implements IUser {
 
-	@Id @Column(name="EMAIL")
+	@Id @Column(name="email")
 	private String email;
 
-	@Column(name="NAME")
+	@Column(name="name")
 	private String name;
 
-	@Column(name="PASSWORD")
+	@Column(name="password")
 	private String password;
+	
+	@Column(name="highscore")
+	private int highscore;
 
+	@Transient
 	private String revision;
 
+	public User() {
+		setHighscore(0);
+	}
+	
+
+	public int getHighscore() {
+		return highscore;
+	}
+
+	public void setHighscore(int highscore) {
+		this.highscore = highscore;
+	}
 
 	@JsonProperty("_id")
 	public String getEmail() {

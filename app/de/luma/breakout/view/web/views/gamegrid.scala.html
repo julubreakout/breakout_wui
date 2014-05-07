@@ -1,6 +1,6 @@
-@(width: Integer, height: Integer, bricks: List[de.luma.breakout.view.web.controllers.HtmlHelper.HtmlBrick], balls: List[de.luma.breakout.view.web.controllers.HtmlHelper.HtmlBrick])
+@(width: Integer, height: Integer, bricks: List[de.luma.breakout.view.web.controllers.HtmlHelper.HtmlBrick], balls: List[de.luma.breakout.view.web.controllers.HtmlHelper.HtmlBrick], score: Int, highScore: Int)
 
-
+<b>High Score: @highScore</b> <b>Current Score: @score</b>
 <div class="GameGridContainer" style="width: @(width)px; height: @(height)px">
 	@for(brick <- bricks) {			
 		<div class="Brick" style="left: @(brick.x)px; top: @(brick.y)px; width: @(brick.width)px;height: @(brick.height)px; background-color: @brick.color">&nbsp;</div>

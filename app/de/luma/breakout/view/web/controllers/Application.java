@@ -32,7 +32,7 @@ public class Application extends Controller  {
 	 */
 	@play.mvc.Security.Authenticated(Secured.class)
 	public Result index() {
-		return ok(de.luma.breakout.view.web.views.html.socket_index.render());
+		return ok(de.luma.breakout.view.web.views.html.socket_index.render(UserController.getActiveUser()));
 	}
 
 	/**
@@ -51,9 +51,7 @@ public class Application extends Controller  {
 		}
 
 		gameController.initialize();
-		GameWebSocket gameInstance = new GameWebSocket(gameController, user);
-		
-		//gameInstances.put(user.getEmail(), gameInstance);
+		GameWebSocket gameInstance = new GameWebSocket(gameController, user, userDAO);
 		
 		return gameInstance;
 	}
@@ -61,4 +59,6 @@ public class Application extends Controller  {
 	public Result test() {  	
 		return ok(Play.current().path().getAbsolutePath());
 	}
+	
+
 }

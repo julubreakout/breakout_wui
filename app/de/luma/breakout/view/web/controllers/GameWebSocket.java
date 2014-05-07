@@ -14,6 +14,7 @@ import de.luma.breakout.communication.IGameObserver;
 import de.luma.breakout.communication.MENU_ITEM;
 import de.luma.breakout.controller.IGameController;
 import de.luma.breakout.controller.IGameController.PLAYER_INPUT;
+import de.luma.breakout.view.web.datalayer.UserDAO;
 import de.luma.breakout.view.web.models.User;
 
 /**
@@ -28,12 +29,14 @@ public class GameWebSocket extends WebSocket<String> implements IGameObserver {
 	private User user;
 		
 	private IGameController gameController;
+	private UserDAO userDAO;
 	
-	public GameWebSocket(IGameController gameController, User user) {
+	public GameWebSocket(IGameController gameController, User user, UserDAO userDAO) {
 		super();
 		this.gson = new Gson();
 		this.gameController = gameController;
 		this.user = user;
+		this.userDAO = userDAO;
 	}
 	
 	@Override
@@ -53,6 +56,14 @@ public class GameWebSocket extends WebSocket<String> implements IGameObserver {
 		// level selection Menu
 		if (gameController.getState() == GAME_STATE.MENU_LEVEL_SEL) {			
 			out.write("LEVEL:" + gson.toJson(gameController.getLevelList()));
+		}
+		
+		// save new highscore
+		if (state == GAME_STATE.MENU_WINGAME) {
+			if (user.getHighscore() < gameController.getScore()) {
+				user.setHighscore(gameController.getScore());
+				userDAO.update(user);
+			}
 		}
 	}
 
@@ -78,7 +89,10 @@ public class GameWebSocket extends WebSocket<String> implements IGameObserver {
 		Html playGrid = de.luma.breakout.view.web.views.html.gamegrid.render(
 				gameController.getGridSize().width,
 				gameController.getGridSize().height,
-				HtmlHelper.getBricks(gameController), HtmlHelper.getBalls(gameController));
+				HtmlHelper.getBricks(gameController), 
+				HtmlHelper.getBalls(gameController),
+				gameController.getScore(),
+				user.getHighscore());
 		
 		out.write("GRID:" + playGrid.body());	
 	}
