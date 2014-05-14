@@ -1,0 +1,44 @@
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+    <title>Gamepad</title>    
+   	<script src="@routes.Assets.at("js/jquery-1.10.1.min.js")"></script>
+   	<style type="text/css">
+   	body {
+		background: #afafaf; /* Old browsers */
+		background: -moz-radial-gradient(center, ellipse cover,  #afafaf 0%, #0e0e0e 100%); /* FF3.6+ */
+		background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%,#afafaf), color-stop(100%,#0e0e0e)); /* Chrome,Safari4+ */
+		background: -webkit-radial-gradient(center, ellipse cover,  #afafaf 0%,#0e0e0e 100%); /* Chrome10+,Safari5.1+ */
+		background: -o-radial-gradient(center, ellipse cover,  #afafaf 0%,#0e0e0e 100%); /* Opera 12+ */
+		background: -ms-radial-gradient(center, ellipse cover,  #afafaf 0%,#0e0e0e 100%); /* IE10+ */
+		background: radial-gradient(ellipse at center,  #afafaf 0%,#0e0e0e 100%); /* W3C */
+   	}
+   	</style>
+</head>
+<body>
+
+<div style="width: 200px; margin: auto; text-align: center">
+	<a id="moveLeft" style="width: 30px; height: 30px; background: red">L</a>
+	<a id="moveRight" style="width: 30px; height: 30px; background: red">R</a>
+</div>
+
+
+<script type="text/javascript">
+	$(document).ready(function() {
+
+		var socketUrl = 'ws://' + window.location.host + '/gamepad_connect';
+		socket = new WebSocket(socketUrl);
+
+		$('#moveLeft').click(function() {
+			socket.send('-3');
+		});
+
+		$('#moveRight').click(function() {
+			socket.send('3');
+		});
+		
+	});
+</script>
+
+</body>
+</html>

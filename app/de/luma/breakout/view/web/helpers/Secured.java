@@ -1,5 +1,6 @@
-package de.luma.breakout.view.web.controllers; 
+package de.luma.breakout.view.web.helpers; 
 
+import de.luma.breakout.view.web.controllers.routes;
 import play.mvc.Http.Context;
 import play.mvc.Result;
 import play.mvc.Security;

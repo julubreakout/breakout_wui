@@ -3,20 +3,19 @@
 # ~~~~
 
 GET     /                        @de.luma.breakout.view.web.controllers.Application.index()
+GET     /gamepad                 @de.luma.breakout.view.web.controllers.Application.gamepad()
 GET     /login                   @de.luma.breakout.view.web.controllers.UserController.login()   
 POST    /login                   @de.luma.breakout.view.web.controllers.UserController.processLogin()
 GET     /logout                  @de.luma.breakout.view.web.controllers.UserController.logout()   
 GET     /account                 @de.luma.breakout.view.web.controllers.UserController.account()
 POST    /account                 @de.luma.breakout.view.web.controllers.UserController.updateAccount()   
 GET     /account/delete          @de.luma.breakout.view.web.controllers.UserController.deleteAccount()   
-
 GET     /register                @de.luma.breakout.view.web.controllers.UserController.register()   
 POST    /register                @de.luma.breakout.view.web.controllers.UserController.processRegister()
 
-GET     /test                    @de.luma.breakout.view.web.controllers.Application.test()
-
 # websocket routes
 GET     /socket_connect          @de.luma.breakout.view.web.controllers.Application.socket_connect()
+GET     /gamepad_connect         @de.luma.breakout.view.web.controllers.Application.gamepad_connect()
 
 #openId routes
 GET     /openid_auth             @de.luma.breakout.view.web.controllers.UserController.openid_auth()

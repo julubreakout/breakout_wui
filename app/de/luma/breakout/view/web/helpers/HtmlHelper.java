@@ -1,4 +1,4 @@
-package de.luma.breakout.view.web.controllers;
+package de.luma.breakout.view.web.helpers;
 
 import java.util.ArrayList;
 import java.util.List;

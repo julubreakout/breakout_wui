@@ -13,6 +13,7 @@ import play.mvc.Result;
 import com.google.inject.Inject;
 
 import de.luma.breakout.view.web.datalayer.UserDAO;
+import de.luma.breakout.view.web.helpers.Secured;
 import de.luma.breakout.view.web.models.User;
 
 /**

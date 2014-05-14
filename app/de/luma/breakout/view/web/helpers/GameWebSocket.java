@@ -1,4 +1,4 @@
-package de.luma.breakout.view.web.controllers;
+package de.luma.breakout.view.web.helpers;
 
 import java.io.File;
 
@@ -30,6 +30,7 @@ public class GameWebSocket extends WebSocket<String> implements IGameObserver {
 		
 	private IGameController gameController;
 	private UserDAO userDAO;
+	private IWebSocketObserver observer;
 	
 	public GameWebSocket(IGameController gameController, User user, UserDAO userDAO) {
 		super();
@@ -133,7 +134,12 @@ public class GameWebSocket extends WebSocket<String> implements IGameObserver {
 		in.onClose(new Callback0() {
 			@Override
 			public void invoke() throws Throwable {
+				// remove this websocket from the gamecontrollers observer list
 				GameWebSocket.this.gameController.removeObserver(GameWebSocket.this);
+				
+				// let the application controller remove itself as observer of this websocket
+				if (observer != null)
+					observer.onClosed(user.getEmail());
 			}
 		});
 		
@@ -157,4 +163,11 @@ public class GameWebSocket extends WebSocket<String> implements IGameObserver {
 	}
 	
 	
+	public IWebSocketObserver getObserver() {
+		return observer;
+	}
+
+	public void setObserver(IWebSocketObserver observer) {
+		this.observer = observer;
+	}
 }
