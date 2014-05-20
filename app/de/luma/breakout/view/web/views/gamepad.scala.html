@@ -1,6 +1,7 @@
 <html>
 <head>
 	<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Gamepad</title>    
    	<script src="@routes.Assets.at("js/jquery-1.10.1.min.js")"></script>
    	<style type="text/css">
@@ -17,26 +18,48 @@
 </head>
 <body>
 
-<div style="width: 200px; margin: auto; text-align: center">
-	<a id="moveLeft" style="width: 30px; height: 30px; background: red">L</a>
-	<a id="moveRight" style="width: 30px; height: 30px; background: red">R</a>
-</div>
+	<a id="moveLeft" style="display: block; position: fixed; left: 0; top: 0; width: 50%; height: 100%; background: red">L</a>
+	<a id="moveRight" style="display: block; position: fixed; left: 50%; top: 0; width: 45%; height: 100%; background: blue">R</a>
 
 
 <script type="text/javascript">
 	$(document).ready(function() {
+		var leftPressed = false;
+		var rightPressed = false;
 
 		var socketUrl = 'ws://' + window.location.host + '/gamepad_connect';
 		socket = new WebSocket(socketUrl);
 
-		$('#moveLeft').click(function() {
-			socket.send('-3');
-		});
+		$('#moveLeft')
+			.mousedown(function() { 
+				rightPressed = false; 
+				leftPressed = true; 
+			})
+			.mouseup(function() { 
+				leftPressed = false; 
+			})
 
-		$('#moveRight').click(function() {
-			socket.send('3');
-		});
+		$('#moveRight')
+			.mousedown(function() { 
+				leftPressed = false; 
+				rightPressed = true; 
+			})
+			.mouseup(function() { 
+				rightPressed = false; 
+			})
 		
+		function sendInput() {
+			if (socket && socket.readyState === 1) {	
+				if (leftPressed) {
+					socket.send('-3');
+				} else if (rightPressed) {
+					socket.send('3');
+				}
+			}
+			window.setTimeout(sendInput, 50);
+		}	
+
+		sendInput();		
 	});
 </script>
 
