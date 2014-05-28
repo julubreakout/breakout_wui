@@ -16,3 +16,5 @@ dist
 /project/*-shim.sbt
 /bin
 /db4o.db
+.classpath
+.project
