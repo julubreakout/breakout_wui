@@ -4,6 +4,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Gamepad</title>    
    	<script src="@routes.Assets.at("js/jquery-1.10.1.min.js")"></script>
+   	<link rel="stylesheet" href="@routes.Assets.at("style/mobile.css")">
    	<style type="text/css">
    	body {
 		background: #afafaf; /* Old browsers */
@@ -18,11 +19,24 @@
 </head>
 <body>
 
-	<a id="moveLeft" style="display: block; position: fixed; left: 0; top: 0; width: 50%; height: 100%; background: red">L</a>
-	<a id="moveRight" style="display: block; position: fixed; left: 50%; top: 0; width: 45%; height: 100%; background: blue">R</a>
+	<div id="rotateScreen">
+		<p>Please Rotate your phone</p>
+	</div>
+    <div id="controller">
+	
+		<div id="stick">
+		
+		</div>
+		<p id="speed"></p>
 
+	</div>
+	
 
 <script type="text/javascript">
+	
+
+
+
 	$(document).ready(function() {
 		var leftPressed = false;
 		var rightPressed = false;
@@ -30,37 +44,104 @@
 		var socketUrl = 'ws://' + window.location.host + '/gamepad_connect';
 		socket = new WebSocket(socketUrl);
 
-		$('#moveLeft')
-			.mousedown(function() { 
-				rightPressed = false; 
-				leftPressed = true; 
-			})
-			.mouseup(function() { 
-				leftPressed = false; 
-			})
-
-		$('#moveRight')
-			.mousedown(function() { 
-				leftPressed = false; 
-				rightPressed = true; 
-			})
-			.mouseup(function() { 
-				rightPressed = false; 
-			})
+		initPosition();
+		if(window.innerHeight > window.innerWidth){
+			$('#stick').hide();
+			$('#rotateScreen').show();
+		}else{
+			$('#rotateScreen').hide();
+			$('#stick').show();
+		}   
+		
+		sendInput();
+	});
+	
+	
+	
+	
+	var originalOffset = $('#stick').offset();
+	var offsetLeft = originalOffset.left;
+	
+	$('#stick').bind('touchmove',function(e){
+	      e.preventDefault();
+	      var touch = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0];
+	      var elm = $(this).offset();
+	      x = touch.pageX - elm.left;
+	      y = touch.pageY - elm.top;
+	      var touchX = touch.pageX;
+	      var touchY = touch.pageY;
+	      var divwitdth = $('#stick').width();
+		  var offset = touchX-divwitdth /2;
+		  var o = {
+		      left: offset
+		  };
+	      if(x < $(this).width() && x > 0){
+	          if(y < $(this).height() && y > 0){
+	          		  var windowWidth = screen.width;
+	          		  var maxOffset = windowWidth / 100 * 40;
+	          		  var leftBound = browserviewportWidth - maxOffset/2;
+	          		  var rightBound = browserviewportWidth + maxOffset/2;
+					  
+					  var sector = rightBound - leftBound;
+					  var middle = sector / 2;
+					  
+					  //block on borders
+	          		  if(offset >= leftBound && offset <= rightBound){
+	          		  	$('#stick').offset(o);
+	          		  }
+	          }
+	      }
+	      
+		});
+	
+		//stick knockback
+		$('#stick').bind('touchend',function(e){
+	      e.preventDefault();
+	      var o = {
+		      left: browserviewportWidth
+		  };
+	      $('#stick').offset(o);
+		 });
+	
+		
+		$(window).on("resize",function(event){
+		  if(window.innerHeight > window.innerWidth){
+				$('#stick').hide();
+				$('#rotateScreen').show();
+			}else{
+				$('#rotateScreen').hide();
+				$('#stick').show();
+			}   
+		  initPosition();
+		});
+		
+		//utility functions
+		function initPosition(){
+			stickWidth = $('#stick').width();
+			browserviewportWidth = $(window).width() / 2 - stickWidth / 2;
+			browserviewportHeight = $(window).height() / 3;
+			var o = {
+				left: browserviewportWidth,
+				top: browserviewportHeight
+			};
+			$('#stick').offset(o);
+		
+		}
 		
 		function sendInput() {
-			if (socket && socket.readyState === 1) {	
-				if (leftPressed) {
-					socket.send('-3');
-				} else if (rightPressed) {
-					socket.send('3');
-				}
+			var currentOffset = $('#stick').offset().left + $('#stick').width() / 2;
+			var baseOffset = $(window).width() / 2;
+			
+			var sendValue = parseInt((currentOffset - baseOffset) / 20);
+			
+			
+			
+			if (socket && socket.readyState === 1 && sendValue != 0) {	
+				socket.send(sendValue);
+				console.log("send " + sendValue + "");
 			}
 			window.setTimeout(sendInput, 50);
 		}	
-
-		sendInput();		
-	});
 </script>
 
 </body>
