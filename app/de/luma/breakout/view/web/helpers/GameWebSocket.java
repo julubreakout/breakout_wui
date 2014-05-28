@@ -1,6 +1,12 @@
 package de.luma.breakout.view.web.helpers;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+import org.apache.http.client.HttpClient;
 
 import play.api.templates.Html;
 import play.libs.F.Callback;
@@ -8,13 +14,17 @@ import play.libs.F.Callback0;
 import play.mvc.WebSocket;
 
 import com.google.gson.Gson;
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 
 import de.luma.breakout.communication.GAME_STATE;
 import de.luma.breakout.communication.IGameObserver;
 import de.luma.breakout.communication.MENU_ITEM;
 import de.luma.breakout.controller.IGameController;
 import de.luma.breakout.controller.IGameController.PLAYER_INPUT;
+import de.luma.breakout.view.web.AppGlobal;
 import de.luma.breakout.view.web.datalayer.UserDAO;
+import de.luma.breakout.view.web.models.Highscore;
 import de.luma.breakout.view.web.models.User;
 
 /**
@@ -59,12 +69,20 @@ public class GameWebSocket extends WebSocket<String> implements IGameObserver {
 			out.write("LEVEL:" + gson.toJson(gameController.getLevelList()));
 		}
 		
+		
 		// save new highscore
-		if (state == GAME_STATE.MENU_WINGAME) {
-			if (user.getHighscore() < gameController.getScore()) {
+		if (state == GAME_STATE.MENU_WINGAME || state == GAME_STATE.MENU_GAMEOVER) {
+			//if (user.getHighscore() < gameController.getScore()) {
+				Highscore highscore = new Highscore(AppGlobal.GameName, user.getName(), gameController.getScore());
+				
+				// post highscore to public server in a separate thread
+				HighscorePoster poster = AppGlobal.getInjector().getInstance(HighscorePoster.class);
+				poster.setHighscore(highscore);
+				poster.run();
+				// save highscore internally
 				user.setHighscore(gameController.getScore());
 				userDAO.update(user);
-			}
+			//}
 		}
 	}
 
@@ -170,4 +188,6 @@ public class GameWebSocket extends WebSocket<String> implements IGameObserver {
 	public void setObserver(IWebSocketObserver observer) {
 		this.observer = observer;
 	}
+
+	
 }

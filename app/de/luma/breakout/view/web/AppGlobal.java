@@ -12,7 +12,8 @@ import play.GlobalSettings;
 public class AppGlobal extends GlobalSettings {
 
 	private final static Injector guice = Guice.createInjector(new HibernateModule());  //  Db4oModule CouchDbModule
-
+	public final static String GameName = "Breakout2";
+	
 	public static Injector getInjector() {
 		return guice;
 	}
