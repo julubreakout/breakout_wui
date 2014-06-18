@@ -1,5 +1,7 @@
 package de.luma.breakout.view.web.helpers;
 
+import akka.actor.ActorRef;
+import de.luma.breakout.communication.messages.GameInputMessage;
 import de.luma.breakout.controller.IGameController;
 import de.luma.breakout.controller.IGameController.PLAYER_INPUT;
 import play.libs.F.Callback;
@@ -8,9 +10,10 @@ import views.html.helper.input;
 
 public class GamepadWebSocket extends WebSocket<String> {
 
-	private final IGameController gameInstance;
+	private final ActorRef gameInstance;
+	//private final ActorRef parentActor;
 
-	public GamepadWebSocket(IGameController gameInstance) {
+	public GamepadWebSocket(ActorRef gameInstance) {
 		this.gameInstance = gameInstance;
 	}
 
@@ -31,7 +34,7 @@ public class GamepadWebSocket extends WebSocket<String> {
 				}
 
 				for (int i = 0; i < Math.abs(value); i++) {
-					gameInstance.processGameInput(inputType);
+					gameInstance.tell(new GameInputMessage(inputType), gameInstance);
 				}
 			}
 		});

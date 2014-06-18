@@ -49,11 +49,11 @@ public class HtmlHelper {
 	/**
 	 * Returns the list of bricks.
 	 */
-	public static List<HtmlBrick> getBricks(IGameController gameController) {
-		List<HtmlBrick> bricks = new ArrayList<HtmlBrick>(gameController.getBricks().size());
+	public static List<HtmlBrick> getBricks(List<IBrick> brickList, IBrick slider) {
+		List<HtmlBrick> bricks = new ArrayList<HtmlBrick>(brickList.size());
 		
 		// add normal bricks
-		for(IBrick brick : gameController.getBricks()) {
+		for(IBrick brick : brickList) {
 			HtmlBrick htmlBrick = new HtmlBrick(brick.getX(), brick.getY(), brick.getWidth(), brick.getHeight());
 			
 			if (brick instanceof MovingBrick) {
@@ -66,7 +66,6 @@ public class HtmlHelper {
 		}
 		
 		// add slider
-		IBrick slider = gameController.getSlider();
 		HtmlBrick htmlSlider = new HtmlBrick(slider.getX(), slider.getY(), slider.getWidth(), slider.getHeight());
 		htmlSlider.color = "green";
 		bricks.add(htmlSlider);
@@ -74,10 +73,10 @@ public class HtmlHelper {
 	}
 	
 	
-	public static List<HtmlBrick> getBalls(IGameController gameController) {
-		List<HtmlBrick> balls = new ArrayList<HtmlBrick>(gameController.getBalls().size());
+	public static List<HtmlBrick> getBalls(List<IBall> ballsList) {
+		List<HtmlBrick> balls = new ArrayList<HtmlBrick>(ballsList.size());
 
-		for(IBall ball : gameController.getBalls()) {
+		for(IBall ball : ballsList) {
 			
 			int radius = (int)ball.getRadius();
 			HtmlBrick htmlBrick = new HtmlBrick((int)ball.getX() - radius/2, (int)ball.getY() - radius/2, (int)ball.getRadius(), (int)ball.getRadius());

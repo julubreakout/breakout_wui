@@ -7,11 +7,15 @@ import play.api.Play;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.WebSocket;
+import akka.actor.ActorRef;
+import akka.actor.Props;
 
 import com.google.inject.Inject;
 
 import de.luma.breakout.controller.GameController;
 import de.luma.breakout.controller.IGameController;
+import de.luma.breakout.controller.GameController.GameControllerActor;
+import de.luma.breakout.view.web.AppGlobal;
 import de.luma.breakout.view.web.datalayer.UserDAO;
 import de.luma.breakout.view.web.helpers.GameWebSocket;
 import de.luma.breakout.view.web.helpers.GamepadWebSocket;
@@ -25,10 +29,10 @@ import de.luma.breakout.view.web.models.User;
 public class Application extends Controller  {
 	
 	private static class GameSession {
-		public IGameController gameController;
+		public ActorRef gameController;
 		public int clientCount;
 		
-		public GameSession(IGameController controller)  {
+		public GameSession(ActorRef controller)  {
 			this.gameController = controller;
 			clientCount = 1;
 		}
@@ -62,7 +66,7 @@ public class Application extends Controller  {
 	public WebSocket<String> socket_connect() {
 		String activeUser = session(UserController.SessionKey_Email);
 		User user = userDAO.getByEmail(activeUser);
-		IGameController gameInstance = null;
+		ActorRef gameInstance = null;
 		
 		if (activeGames.containsKey(activeUser)) {   // re-use running a game?
 			GameSession session = activeGames.get(activeUser);
@@ -73,14 +77,14 @@ public class Application extends Controller  {
 			
 			// create a new game(controller) instance
 			if (Play.current().path().getAbsolutePath().startsWith("/app")) {
-				gameInstance = new GameController("/app/");			
+				gameInstance = AppGlobal.getActorSystem().actorOf(Props.create(GameControllerActor.class, "/app/"));		
 			} else {
-				gameInstance = new GameController("");
+				gameInstance = AppGlobal.getActorSystem().actorOf(Props.create(GameControllerActor.class, ""));
 			}
 			
 			GameSession session = new GameSession(gameInstance);
 			activeGames.put(activeUser, session);
-			gameInstance.initialize();
+			//gameInstance.initialize();
 		}
 		
 		// add a websocket wrapper to the controller

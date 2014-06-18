@@ -1,4 +1,7 @@
 package de.luma.breakout.view.web;
+import akka.actor.ActorSystem;
+import akka.actor.Props;
+
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
@@ -12,6 +15,7 @@ import play.GlobalSettings;
 public class AppGlobal extends GlobalSettings {
 
 	private final static Injector guice = Guice.createInjector(new HibernateModule());  //  Db4oModule CouchDbModule
+	private static ActorSystem actorSystem = null;
 	public final static String GameName = "Breakout2";
 	
 	public static Injector getInjector() {
@@ -28,8 +32,13 @@ public class AppGlobal extends GlobalSettings {
 	@Override
 	public void onStart(Application arg0) {
 		super.onStart(arg0);
+		
+		System.out.println("Creating actor system.");
+		setActorSystem(ActorSystem.create("Breakout2ActorSystem"));
+		
 		System.out.println("Opening database connection.");
 		getInjector().getInstance(UserDAO.class).openConnection();
+		
 	}
 	
 	@Override
@@ -37,6 +46,14 @@ public class AppGlobal extends GlobalSettings {
 		super.onStop(arg0);
 		System.out.println("Closing database connection.");
 		getInjector().getInstance(UserDAO.class).closeConnection();
+	}
+
+	public static ActorSystem getActorSystem() {
+		return actorSystem;
+	}
+
+	private static void setActorSystem(ActorSystem actorSystem) {
+		AppGlobal.actorSystem = actorSystem;
 	}
 
 }

@@ -1,0 +1,22 @@
+grammar de.luma.breakout.ModelDsl with org.eclipse.xtext.xbase.Xbase
+import "http://www.eclipse.org/xtext/common/JavaVMTypes"
+
+
+generate modelDsl "http://www.ModelDsl"
+
+modelDsl:
+	(entities += Entity)+;
+	
+Entity:
+	'persistent entity' name=ID '['
+		(properties+=Property)+
+	']';
+
+Property:
+	'property' name=ID 'as' type=QualifiedName (isIdentifier)?  ';'
+;
+
+QualifiedName:
+  ID('.'ID)*;
+  
+isIdentifier: '#identifier';
