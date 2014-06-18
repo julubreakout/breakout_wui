@@ -84,7 +84,6 @@ public class Application extends Controller  {
 			
 			GameSession session = new GameSession(gameInstance);
 			activeGames.put(activeUser, session);
-			//gameInstance.initialize();
 		}
 		
 		// add a websocket wrapper to the controller

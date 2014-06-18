@@ -29,8 +29,9 @@ import com.google.inject.name.Named;
 import de.luma.breakout.communication.GAME_STATE;
 import de.luma.breakout.communication.IGameObserver;
 import de.luma.breakout.communication.MENU_ITEM;
+import de.luma.breakout.communication.messages.DetachObserverMessage;
 import de.luma.breakout.communication.messages.GameInputMessage;
-import de.luma.breakout.communication.messages.InitMessage;
+import de.luma.breakout.communication.messages.AddObserverMessage;
 import de.luma.breakout.communication.messages.LoadLevelMessage;
 import de.luma.breakout.communication.messages.MenuInputMessage;
 import de.luma.breakout.communication.messages.ShowMenuMessage;
@@ -53,6 +54,12 @@ import de.luma.breakout.view.web.models.User;
  */
 public class GameWebSocket extends WebSocket<String> {
 	
+	/**
+	 * Proxy class which creates an Actor for the websocket instance (which cannot extend UntypedActor)
+	 * and forwards messages from the GameController to the WebSocket instance.
+	 * @author lueckert
+	 *
+	 */
 	private static class WebsocketActorProxy extends UntypedActor {
 		
 		private ActorRef gameInstance;
@@ -71,6 +78,7 @@ public class GameWebSocket extends WebSocket<String> {
 				gameInstance.tell(msg, getSelf());
 			}
 			else {
+				// message from GameController to be forwareded to the WebSocket instance
 				websocketInstance.onReceive(msg);
 			}
 		}
@@ -99,16 +107,17 @@ public class GameWebSocket extends WebSocket<String> {
 			@Override
 			public Actor create() throws Exception {
 				return new WebsocketActorProxy(GameWebSocket.this, gameController);
-			
 			}
 		});
 	
 		this.controllerProxy = AppGlobal.getActorSystem().actorOf(props);
-		// Send init message to game controller
-		this.controllerProxy.tell(new InitMessage(), controllerProxy);
 	}
 	
 	
+	/**
+	 * Is called when messages from the GameController are received. 
+	 * Maps the messages to the observable events of the Game Controller.
+	 */
 	public void onReceive(Object msg)  {
 		if (msg instanceof ShowMenuMessage) {
 			ShowMenuMessage menuMsg = (ShowMenuMessage)msg;
@@ -128,6 +137,9 @@ public class GameWebSocket extends WebSocket<String> {
 	 * Notifies client of changed game state (JSON-formatted)
 	 */
 	public void updateGameState(GAME_STATE state, int score, List<String> levelList) {
+		if (out == null)
+			return;
+		
 		out.write("STATE:" + state);
 		
 		// level selection Menu
@@ -138,17 +150,15 @@ public class GameWebSocket extends WebSocket<String> {
 		
 		// save new highscore
 		if (state == GAME_STATE.MENU_WINGAME || state == GAME_STATE.MENU_GAMEOVER) {
-			//if (user.getHighscore() < gameController.getScore()) {
-				Highscore highscore = new Highscore(AppGlobal.GameName, user.getName(), score);
-				
-				// post highscore to public server in a separate thread
-				HighscorePoster poster = AppGlobal.getInjector().getInstance(HighscorePoster.class);
-				poster.setHighscore(highscore);
-				poster.run();
-				// save highscore internally
-				user.setHighscore(score);
-				userDAO.update(user);
-			//}
+			Highscore highscore = new Highscore(AppGlobal.GameName, user.getName(), score);
+
+			// post highscore to public server in a separate thread
+			HighscorePoster poster = AppGlobal.getInjector().getInstance(HighscorePoster.class);
+			poster.setHighscore(highscore);
+			poster.run();
+			// save highscore internally
+			user.setHighscore(score);
+			userDAO.update(user);
 		}
 	}
 
@@ -156,8 +166,9 @@ public class GameWebSocket extends WebSocket<String> {
 	 * Sends menu items to client (JSON-formatted)
 	 */
 	public void updateGameMenu(MENU_ITEM[] menuItems, String title) {	
-		System.out.println("updateGameMenu");
-	
+		if (out == null)
+			return;
+		
 		out.write("MENU:" + gson.toJson(HtmlHelper.getMenu(menuItems, title)));
 	}
 
@@ -165,7 +176,7 @@ public class GameWebSocket extends WebSocket<String> {
 	 * Sends the rendered play grid to the client.  (HTML)
 	 */
 	public void updateGameFrame(GAME_STATE state, List<IBrick> bricks, IBrick slider, List<IBall> balls, Dimension gridSize, int score) {
-		if (state != GAME_STATE.RUNNING) {
+		if (out == null || state != GAME_STATE.RUNNING) {
 			return;
 		}
 
@@ -186,6 +197,8 @@ public class GameWebSocket extends WebSocket<String> {
 	 */
 	@Override
 	public void onReady(play.mvc.WebSocket.In<String> in, play.mvc.WebSocket.Out<String> out) {
+		this.out = out;
+		this.in = in;
 		
 		// handler for incoming messages
 		in.onMessage(new Callback<String>() {
@@ -217,7 +230,7 @@ public class GameWebSocket extends WebSocket<String> {
 			@Override
 			public void invoke() throws Throwable {
 				// remove this websocket from the gamecontrollers observer list
-				//GameWebSocket.this.gameController.removeObserver(GameWebSocket.this);
+				GameWebSocket.this.controllerProxy.tell(new DetachObserverMessage(), GameWebSocket.this.controllerProxy);
 				
 				// let the application controller remove itself as observer of this websocket
 				if (observer != null)
@@ -225,25 +238,10 @@ public class GameWebSocket extends WebSocket<String> {
 			}
 		});
 		
-		this.out = out;
-		this.in = in;
-		
-		// add this client to the observers of the running game
-		//GameWebSocket.this.gameController.addObserver(GameWebSocket.this);
-		
-		// Send the current state of the game to the client
-		// so that the client can show a menu that appeared before the connection was established.
-		//initFirstFrame();
+		// Send init message to game controller
+		System.out.println("Websocket connecting to controller actor:" + controllerProxy.toString());
+		this.controllerProxy.tell(new AddObserverMessage(), controllerProxy);
 	}
-
-	
-//	private void initFirstFrame() {
-//		if (this.gameController.getState() != GAME_STATE.RUNNING) {
-//			updateGameState(GAME_STATE.MENU_MAIN);
-//			updateGameMenu(gameController.getGameMenu().getMenuItems(), gameController.getGameMenu().getTitle());
-//		}
-//	}
-	
 	
 	public IWebSocketObserver getObserver() {
 		return observer;
