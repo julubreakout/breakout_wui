@@ -5,6 +5,7 @@ import "http://www.eclipse.org/xtext/common/JavaVMTypes"
 generate modelDsl "http://www.ModelDsl"
 
 modelDsl:
+	'namespace' namespace=QualifiedName ';'
 	(entities += Entity)+;
 	
 Entity:
@@ -13,10 +14,8 @@ Entity:
 	']';
 
 Property:
-	'property' name=ID 'as' type=QualifiedName (isIdentifier)?  ';'
+	'property' name=ID 'as' type=QualifiedName (isIdentifier?='#identifier')?  ';'
 ;
 
 QualifiedName:
   ID('.'ID)*;
-  
-isIdentifier: '#identifier';
