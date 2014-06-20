@@ -38,6 +38,7 @@ public class Application extends Controller  {
 		}
 	}
 	
+	
 	private Map<String, GameSession> activeGames;
 
 	@Inject
