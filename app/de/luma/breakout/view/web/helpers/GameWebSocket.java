@@ -1,14 +1,8 @@
 package de.luma.breakout.view.web.helpers;
 
 import java.awt.Dimension;
-import java.io.File;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.List;
-
-import org.apache.http.client.HttpClient;
+import java.util.Set;
 
 import play.api.templates.Html;
 import play.libs.F.Callback;
@@ -16,30 +10,22 @@ import play.libs.F.Callback0;
 import play.mvc.WebSocket;
 import akka.actor.Actor;
 import akka.actor.ActorRef;
-import akka.actor.Deploy;
 import akka.actor.Props;
 import akka.actor.UntypedActor;
 import akka.actor.UntypedActorFactory;
-import akka.japi.Creator;
 
 import com.google.gson.Gson;
-import com.google.inject.Inject;
-import com.google.inject.name.Named;
 
 import de.luma.breakout.communication.GAME_STATE;
-import de.luma.breakout.communication.IGameObserver;
 import de.luma.breakout.communication.MENU_ITEM;
+import de.luma.breakout.communication.messages.AddObserverMessage;
 import de.luma.breakout.communication.messages.DetachObserverMessage;
 import de.luma.breakout.communication.messages.GameInputMessage;
-import de.luma.breakout.communication.messages.AddObserverMessage;
 import de.luma.breakout.communication.messages.LoadLevelMessage;
 import de.luma.breakout.communication.messages.MenuInputMessage;
 import de.luma.breakout.communication.messages.ShowMenuMessage;
 import de.luma.breakout.communication.messages.UpdateGameFrameMessage;
 import de.luma.breakout.communication.messages.UpdateGameStateMessage;
-import de.luma.breakout.controller.GameController;
-import de.luma.breakout.controller.GameController.GameControllerActor;
-import de.luma.breakout.controller.IGameController;
 import de.luma.breakout.controller.IGameController.PLAYER_INPUT;
 import de.luma.breakout.data.objects.IBall;
 import de.luma.breakout.data.objects.IBrick;
@@ -92,10 +78,10 @@ public class GameWebSocket extends WebSocket<String> {
 	private User user;
 	
 	private ActorRef controllerProxy;
-	private UserDAO userDAO;
+	private Set<UserDAO> userDAO;
 	private IWebSocketObserver observer;
 	
-	public GameWebSocket(final ActorRef gameController, User user, UserDAO userDAO) {
+	public GameWebSocket(final ActorRef gameController, User user, Set<UserDAO> userDAO) {
 		super();
 		
 		this.gson = new Gson();
@@ -158,7 +144,10 @@ public class GameWebSocket extends WebSocket<String> {
 			poster.run();
 			// save highscore internally
 			user.setHighscore(score);
-			userDAO.update(user);
+		//	userDAO.update(user);
+			for(UserDAO db : userDAO){
+				db.update(user);
+			}
 		}
 	}
 

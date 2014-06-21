@@ -2,6 +2,7 @@ package de.luma.breakout.view.web.controllers;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import play.api.Play;
 import play.mvc.Controller;
@@ -41,11 +42,12 @@ public class Application extends Controller  {
 	
 	private Map<String, GameSession> activeGames;
 
-	@Inject
-	private UserDAO userDAO;
+	private Set<UserDAO> userDAO;
 
-	public Application() {
+	@Inject
+	public Application(Set<UserDAO> users) {
 		activeGames = new HashMap<String, GameSession>();
+		this.userDAO = users;
 	}
 
 	// #################### ACTIONS FOR WEBSOCKET VERSION ##########################
@@ -66,7 +68,7 @@ public class Application extends Controller  {
 	@play.mvc.Security.Authenticated(Secured.class)
 	public WebSocket<String> socket_connect() {
 		String activeUser = session(UserController.SessionKey_Email);
-		User user = userDAO.getByEmail(activeUser);
+		User user = userDAO.iterator().next().getByEmail(activeUser);
 		ActorRef gameInstance = null;
 		
 		if (activeGames.containsKey(activeUser)) {   // re-use running a game?

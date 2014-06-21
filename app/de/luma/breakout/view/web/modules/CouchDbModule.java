@@ -9,9 +9,11 @@ import org.ektorp.http.StdHttpClient;
 import org.ektorp.impl.StdCouchDbInstance;
 
 import com.google.inject.Singleton;
+import com.google.inject.multibindings.Multibinder;
 import com.google.inject.name.Names;
 
 import de.luma.breakout.view.web.datalayer.CouchDbUserDAO;
+import de.luma.breakout.view.web.datalayer.HibernateUserDAO;
 import de.luma.breakout.view.web.datalayer.UserDAO;
 
 public class CouchDbModule extends BreakoutBaseModule {
@@ -34,7 +36,9 @@ public class CouchDbModule extends BreakoutBaseModule {
 			throw new RuntimeException(e.getMessage());
 		}
 
-		bind(UserDAO.class).to(CouchDbUserDAO.class).in(Singleton.class);
+		//bind(UserDAO.class).to(CouchDbUserDAO.class).in(Singleton.class);
+		Multibinder<UserDAO> mb = Multibinder.newSetBinder(binder(), UserDAO.class);
+		mb.addBinding().to(CouchDbUserDAO.class).in(Singleton.class);
 	}
 
 }

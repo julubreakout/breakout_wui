@@ -2,6 +2,7 @@ package de.luma.breakout.view.web.controllers;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import play.data.DynamicForm;
 import play.data.Form;
@@ -33,9 +34,13 @@ public class UserController extends Controller {
 	 */
 	public static final String SessionKey_Email = "Email";
 	
-	@Inject
-	private UserDAO userDAO;
+	
+	Set<UserDAO> userDAO;
 
+	@Inject
+	public UserController(Set<UserDAO> users){
+		this.userDAO = users;
+	}
 
 	// ##########################  LOGIN HANDLERS ###########################
 
@@ -71,8 +76,8 @@ public class UserController extends Controller {
 		Form<User> filledForm = DynamicForm.form(User.class).bindFromRequest();		
 		User userModel = filledForm.get();
 
-		// get user from DB
-		User user = userDAO.getByEmail(userModel.getEmail());
+		// get user from one DB
+		User user = userDAO.iterator().next().getByEmail(userModel.getEmail());
 		if (user == null) {
 			return ok(de.luma.breakout.view.web.views.html.login.render(userModel, "User does not exist. Please register first."));
 		}
@@ -108,7 +113,10 @@ public class UserController extends Controller {
 		Form<User> filledForm = DynamicForm.form(User.class).bindFromRequest();		
 		User user = filledForm.get();
 		System.out.println("creating new player");
-		userDAO.create(user);
+
+		for(UserDAO db: userDAO){
+			db.create(user);
+		}
 
 		return redirect(routes.UserController.login());
 	}
@@ -119,7 +127,7 @@ public class UserController extends Controller {
 	 */
 	@play.mvc.Security.Authenticated(Secured.class)
 	public Result account() {
-		User currentUser = userDAO.getByEmail(session(SessionKey_Email));
+		User currentUser = userDAO.iterator().next().getByEmail(session(SessionKey_Email));
 		return ok(de.luma.breakout.view.web.views.html.account.render(currentUser, "")); 
 	}
 
@@ -129,7 +137,7 @@ public class UserController extends Controller {
 	 */
 	@play.mvc.Security.Authenticated(Secured.class)
 	public Result updateAccount() {
-		User currentUser = userDAO.getByEmail(session(SessionKey_Email));
+		User currentUser = userDAO.iterator().next().getByEmail(session(SessionKey_Email));
 		
 		Form<User> filledForm = DynamicForm.form(User.class).bindFromRequest();		
 		User userModel = filledForm.get();
@@ -140,8 +148,9 @@ public class UserController extends Controller {
 			currentUser.setPassword(userModel.getPassword());
 		}
 		
-		userDAO.update(currentUser);
-		
+		for(UserDAO db: userDAO){
+			db.update(currentUser);
+		}
 		return ok(de.luma.breakout.view.web.views.html.account.render(currentUser, "Updated user account.")); 
 	}
 	
@@ -151,9 +160,10 @@ public class UserController extends Controller {
 	 */
 	@play.mvc.Security.Authenticated(Secured.class)
 	public Result deleteAccount() {
-		User currentUser = userDAO.getByEmail(session(SessionKey_Email));
-		userDAO.delete(currentUser);
-		
+		User currentUser = userDAO.iterator().next().getByEmail(session(SessionKey_Email));
+		for(UserDAO db: userDAO){
+			db.delete(currentUser);
+		}
 		session().clear();
 		
 		return redirect(routes.UserController.login());
@@ -189,13 +199,15 @@ public class UserController extends Controller {
 		String name = userInfo.attributes.get("FirstName") + " " + userInfo.attributes.get("LastName");
 		
 		// check if an account exists for this email
-		User user = userDAO.getByEmail(email);
+		User user = userDAO.iterator().next().getByEmail(email);
 		if (user == null) {
 			 // first login of this user -> create new account in background
 			User userModel = new User();
 			userModel.setEmail(email);
 			userModel.setName(name);
-			userDAO.create(userModel);
+			for(UserDAO db: userDAO){
+				db.create(userModel);
+			}
 		} else {
 			// user may have changed the own name
 			name = user.getName();
