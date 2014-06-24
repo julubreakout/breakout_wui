@@ -32,7 +32,7 @@ public class GamepadWebSocket extends WebSocket<String> {
 				}
 
 				for (int i = 0; i < Math.abs(value); i++) {
-					gameInstance.tell(new GameInputMessage(inputType), gameInstance);
+					gameInstance.tell(new GameInputMessage(inputType), null);
 				}
 			}
 		});
