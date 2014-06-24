@@ -18,6 +18,7 @@ import com.google.gson.Gson;
 
 import de.luma.breakout.communication.GAME_STATE;
 import de.luma.breakout.communication.MENU_ITEM;
+import de.luma.breakout.communication.PLAYER_INPUT;
 import de.luma.breakout.communication.messages.AddObserverMessage;
 import de.luma.breakout.communication.messages.DetachObserverMessage;
 import de.luma.breakout.communication.messages.GameInputMessage;
@@ -26,7 +27,6 @@ import de.luma.breakout.communication.messages.MenuInputMessage;
 import de.luma.breakout.communication.messages.ShowMenuMessage;
 import de.luma.breakout.communication.messages.UpdateGameFrameMessage;
 import de.luma.breakout.communication.messages.UpdateGameStateMessage;
-import de.luma.breakout.controller.IGameController.PLAYER_INPUT;
 import de.luma.breakout.data.objects.IBall;
 import de.luma.breakout.data.objects.IBrick;
 import de.luma.breakout.view.web.AppGlobal;

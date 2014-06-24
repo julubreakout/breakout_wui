@@ -1,12 +1,10 @@
 package de.luma.breakout.view.web.helpers;
 
-import akka.actor.ActorRef;
-import de.luma.breakout.communication.messages.GameInputMessage;
-import de.luma.breakout.controller.IGameController;
-import de.luma.breakout.controller.IGameController.PLAYER_INPUT;
 import play.libs.F.Callback;
 import play.mvc.WebSocket;
-import views.html.helper.input;
+import akka.actor.ActorRef;
+import de.luma.breakout.communication.PLAYER_INPUT;
+import de.luma.breakout.communication.messages.GameInputMessage;
 
 public class GamepadWebSocket extends WebSocket<String> {
 
