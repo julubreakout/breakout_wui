@@ -1,4 +1,4 @@
-1) play framework 2.2.1 downloaden und entpacken
+﻿1) play framework 2.2.1 downloaden und entpacken
 2) play-verzeichnis in PATH-variable aufnehmen
 3) play plugin in eclipse installieren:
 	http://download.scala-ide.org/sdk/e38/scala210/stable/site
@@ -10,5 +10,5 @@
 
 
 logindaten für herolu.com:
-user: lukas.eckert@htwg-konstanz.de
+user: luka........@htwg-konstanz.de
 pw: sup....99
