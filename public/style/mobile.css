@@ -29,3 +29,12 @@
     -o-transition: all 250ms ease-out;
     transition: all 250ms ease-out;	
 }
+
+#rotateScreen {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top:50%;
+	left: 50%;
+	
+}
